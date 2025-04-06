@@ -1,32 +1,36 @@
-#Projeto Mensal 02
--Atividade avaliativa referente ao segundo projeto do 3 semestre de Analise de desenvolvimento de Sistemas.
+Projeto Mensal 02
+
+Projeto do 3º semestre de Análise e Desenvolvimento de Sistemas.
 
 ⚙️ Tecnologias
- O projeto foi desenvolvido utilizando as seguintes tecnologias:
 
--Java 17: Linguagem de programação moderna, robusta e orientada a objetos, escolhida por sua estabilidade e desempenho no desenvolvimento backend.
+Java 17: Backend com POO.
 
--PostgreSQL: Sistema de gerenciamento de banco de dados relacional (SGBD) open source, utilizado para armazenar e organizar os dados da aplicação.
+PostgreSQL: Banco de dados relacional.
 
--Maven: Ferramenta de automação de build e gerenciamento de dependências do projeto, facilitando a organização e manutenção do ambiente de desenvolvimento.
+Maven: Gerenciador de dependências e build.
 
-🛠 Requisitos funcionais
 
--Menu interativo no console com operações CRUD.
+🛠 Requisitos Funcionais
 
--Persistência de dados no banco PostgreSQL.
+Menu interativo com operações CRUD.
 
--Tratamento de exceções (erros de conexão, entradas inválidas, etc.).
+Persistência no PostgreSQL.
 
--Projeto com execução autônoma e instruções claras no repositório GitHub.
+Tratamento de exceções.
 
--Java com Programação Orientada a Objetos (POO).
+Execução autônoma com instruções no GitHub.
+
+Uso de Programação Orientada a Objetos.
+
 
 🛠 DER (Diagrama Entidade-Relacionamento):
 
 ![image](https://github.com/user-attachments/assets/a5c43f80-35f0-4199-a5c6-2752474588e8)
 
 ![image](https://github.com/user-attachments/assets/2c2f26b6-87d3-454c-9f01-a83e9fd36ea8)
+
+https://lucid.app/lucidchart/1ee97289-0c4c-4689-ba6f-80c036a646ed/edit?viewport_loc=832%2C-216%2C1609%2C816%2C0_0&invitationId=inv_3cbe8fad-3549-486c-9fe4-087ba063ade8
 
 🛠 Intregantes
 
