@@ -1,5 +1,6 @@
 package br.com.ecommerce.entities.cliente;
-
+import java.util.Set;
+import br.com.ecommerce.entities.endereco.EnderecoEntity;
 
 import javax.persistence.*;
 
@@ -22,9 +23,13 @@ public class PessoaEntity {
     @Column(name = "data de nascimento" ,nullable = false)
     private long dataDeNascimento;
 
-    @ManyToMany
-    @JoinColumn(name = "endereço_id")
-    private EnderecoEntity enderecoEntity;
+    @OneToMany
+    @JoinTable (
+        name = "pessoa_endereco",
+        joinColumns = @JoinColumn(name = "pessoa_id"),
+            inverseJoinColumns = @JoinColumn(name = "endereco_id")
+    )
+    private Set<EnderecoEntity> enderecos;
 
     @OneToOne
     @JoinColumn(name = "clienteVarejo_id")

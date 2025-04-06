@@ -1,4 +1,6 @@
-package br.com.ecommerce.entities.cliente;
+package br.com.ecommerce.entities.endereco;
+import br.com.ecommerce.entities.cliente.PessoaEntity;
+import java.util.Set;
 import javax.persistence.*;
 
 @Entity(name = "endereço")
@@ -31,6 +33,9 @@ public class EnderecoEntity {
         this.estado = estado;
         this.cep = cep;
     }
+
+    @ManyToMany(mappedBy = "enderecos")
+    private Set<PessoaEntity> pessoas;
 
     public Long getId() {
         return id;
