@@ -2,13 +2,16 @@ Projeto Mensal 02
 Projeto do 3º semestre de Análise e Desenvolvimento de Sistemas.
 
 ⚙️ Tecnologias
+
 Java 17: Backend com POO.
 
 PostgreSQL: Banco de dados relacional.
 
 Maven: Gerenciador de dependências e build.
 
+
 🛠 Requisitos Funcionais
+
 Menu interativo com operações CRUD.
 
 Persistência no PostgreSQL.
@@ -18,6 +21,7 @@ Tratamento de exceções.
 Execução autônoma com instruções no GitHub.
 
 Uso de Programação Orientada a Objetos.
+
 
 🛠 DER (Diagrama Entidade-Relacionamento):
 
