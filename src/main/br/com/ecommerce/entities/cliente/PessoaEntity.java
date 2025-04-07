@@ -20,7 +20,7 @@ public class PessoaEntity {
     @Column(name = "cpf" ,nullable = false,unique = true)
     private String cpf;
 
-    @Column(name = "data de nascimento" ,nullable = false)
+    @Column(name = "dataDeNascimento" ,nullable = false)
     private long dataDeNascimento;
 
     @OneToMany

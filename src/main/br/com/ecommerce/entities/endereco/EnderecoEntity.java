@@ -3,7 +3,7 @@ import br.com.ecommerce.entities.cliente.PessoaEntity;
 import java.util.Set;
 import javax.persistence.*;
 
-@Entity(name = "endereço")
+@Entity(name = "endereco")
 public class EnderecoEntity {
 
     @Id

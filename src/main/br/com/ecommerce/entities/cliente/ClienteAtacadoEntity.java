@@ -2,7 +2,7 @@ package br.com.ecommerce.entities.cliente;
 
 import javax.persistence.*;
 
-@Entity(name = "cliente de Atacado")
+@Entity(name = "clienteAtacado")
 public class ClienteAtacadoEntity {
 
     @Id

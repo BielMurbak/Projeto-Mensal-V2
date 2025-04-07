@@ -1,10 +1,8 @@
 package br.com.ecommerce.entities.produto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "tenis")
 public class TenisEntity {
@@ -25,7 +23,14 @@ public class TenisEntity {
         this.id = id;
     }
 
-    //public interface TenisRepository extends JpaRepository<TenisEntity, Long> {
-    //}
+    @OneToMany(mappedBy = "tenis")
+    private List<ProdutoEntity> produtos;
 
+    public List<ProdutoEntity> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(List<ProdutoEntity> produtos) {
+        this.produtos = produtos;
+    }
 }

@@ -1,17 +1,20 @@
 package br.com.ecommerce.entities.compra;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import br.com.ecommerce.entities.produto.ProdutoEntity;
 
-@Entity(name = "historico de compras ")
+import javax.persistence.*;
+
+@Entity(name = "historicoDeCompras ")
 public class HistoricoDeComprasEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "produto_id", nullable = false)
+    private ProdutoEntity produto;
 
     public HistoricoDeComprasEntity(Long id) {
         this.id = id;

@@ -3,9 +3,12 @@ package br.com.ecommerce.entities.produto;
 import br.com.ecommerce.entities.compra.HistoricoDeComprasEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "produto")
 public class ProdutoEntity {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,13 +26,12 @@ public class ProdutoEntity {
     @Column(name = "preço" ,nullable = false)
     private double preco;
 
-    @OneToOne
-   @JoinColumn(name = "tenis_id")
-   private TenisEntity tenisEntity;
+    @ManyToOne
+    @JoinColumn(name = "tenis_id")
+    private TenisEntity tenis;
 
-    @OneToMany
-    @JoinColumn(name = "historicoCompras_id")
-    private HistoricoDeComprasEntity historicoDeComprasEntity;
+    @OneToMany(mappedBy = "produto")
+    private List<HistoricoDeComprasEntity> historicos = new ArrayList<>();
 
 
     public ProdutoEntity(Long id, String nome, int codigo, int quantidade, double preco) {

@@ -1,5 +1,6 @@
 package br.com.ecommerce.system;
 
+import br.com.ecommerce.entities.cliente.AdministradorEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -14,6 +15,7 @@ public class Main {
                     Session session = sessionFactory.openSession();
 
                     System.out.println("Conexão com o banco de dados estabelecida com sucesso!");
+
 
                     // Fechar a sessão e a fábrica
                     session.close();
