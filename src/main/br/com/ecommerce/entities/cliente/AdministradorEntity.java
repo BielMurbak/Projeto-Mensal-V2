@@ -33,4 +33,8 @@ public class AdministradorEntity {
         this.id = id;
         this.senha = senha;
     }
+
+    @OneToOne
+    @JoinColumn(name = "pessoa_id")
+    private PessoaEntity pessoaEntity;
 }

@@ -25,7 +25,7 @@ public class SystemLoginOrCadastro {
                     loginUserOrAdm();
                     break;
                 case 2:
-                    cadastrarUser();
+                    cadastrarUser(scanner);
                     break;
                 case 3:
                     System.out.println("✅ Programa foi encerrado com sucesso.");
@@ -38,13 +38,68 @@ public class SystemLoginOrCadastro {
 
     }//fecha public void SystemLoginOrCadastro
 
-
-
-    public static  void cadastrarUser() {
-    }
-
     public static void loginUserOrAdm() {
     }
 
+    public static void cadastrarUser(Scanner scanner) {
+
+        //nome
+        System.out.print("Digite seu nome: ");
+        String nome = scanner.nextLine().trim();
+
+        // Idade
+
+        while (true) {
+            System.out.print("Qual sua idade? ");
+            int idade = scanner.nextInt();
+            try {
+                idade = Integer.parseInt(scanner.nextLine());
+                if (idade >= 18) {
+                    break; // idade válida, sai do loop
+                } else {
+                    System.out.println("Você precisa ter 18 anos ou mais para continuar.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Digite uma idade válida (número).");
+            }
+        }
+
+        // CEP
+        while (true) {
+            System.out.print("Digite seu CEP (somente números, ex: 12345678): ");
+            String cep = scanner.nextLine().trim();
+
+            if (cep.matches("\\d{8}")) {
+                break;
+            } else {
+                System.out.println("CEP inválido. Deve conter exatamente 8 números.");
+            }
+        }
+
+        while (true) {
+            System.out.print("Digite seu CPF (somente números, ex: 12345678901): ");
+            String cpf = scanner.nextLine().trim();
+
+            if (cpf.matches("\\d{11}")) {
+                break;
+            } else {
+                System.out.println("CPF inválido. Deve conter exatamente 11 números.");
+            }
+        }
+
+
+        // Senha
+        while (true) {
+            System.out.print("Crie uma senha (mínimo 4 caracteres): ");
+            String senha = scanner.nextLine().trim();
+
+            if (senha.length() >= 4) {
+                break;
+            } else {
+                System.out.println("Senha muito curta. Tente novamente.");
+            }
+        }
+
+    }
 }//fecha class SystemLoginOrCadastro
 

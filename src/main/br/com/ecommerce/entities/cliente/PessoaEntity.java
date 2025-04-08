@@ -31,16 +31,4 @@ public class PessoaEntity {
     )
     private Set<EnderecoEntity> enderecos;
 
-    @OneToOne
-    @JoinColumn(name = "clienteVarejo_id")
-    private ClienteVarejoEntity  clienteVarejoEntity;
-
-    @OneToOne
-    @JoinColumn(name = "clienteAtacado_id")
-    private ClienteAtacadoEntity clienteAtacadoEntity;
-
-    @OneToOne
-    @JoinColumn(name = "administrador_id")
-    private AdministradorEntity administradorEntity;
-
 }

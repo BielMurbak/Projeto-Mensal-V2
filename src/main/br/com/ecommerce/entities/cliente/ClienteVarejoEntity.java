@@ -35,5 +35,8 @@ public class ClienteVarejoEntity {
         this.senha = senha;
     }
 
+    @OneToOne
+    @JoinColumn(name = "pessoa_id")
+    private PessoaEntity pessoaEntity;
 
 }

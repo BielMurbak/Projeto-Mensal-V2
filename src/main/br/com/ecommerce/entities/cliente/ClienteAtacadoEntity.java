@@ -44,4 +44,8 @@ public class ClienteAtacadoEntity {
     public void setDesconto(double desconto) {
         this.desconto = desconto;
     }
+
+    @OneToOne
+    @JoinColumn(name = "pessoa_id")
+    private PessoaEntity pessoaEntity;
 }
