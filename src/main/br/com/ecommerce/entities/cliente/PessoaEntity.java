@@ -1,8 +1,10 @@
 package br.com.ecommerce.entities.cliente;
+import java.time.LocalDate;
 import java.util.Set;
 import br.com.ecommerce.entities.endereco.EnderecoEntity;
 
 import javax.persistence.*;
+import javax.xml.crypto.Data;
 
 @Entity(name = "pessoa")
 public class PessoaEntity {
@@ -21,7 +23,7 @@ public class PessoaEntity {
     private String cpf;
 
     @Column(name = "dataDeNascimento" ,nullable = false)
-    private long dataDeNascimento;
+    private LocalDate dataDeNascimento;
 
     @OneToMany
     @JoinTable (
@@ -31,4 +33,51 @@ public class PessoaEntity {
     )
     private Set<EnderecoEntity> enderecos;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getIdade() {
+        return idade;
+    }
+
+    public void setIdade(int idade) {
+        this.idade = idade;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public LocalDate getDataDeNascimento() {
+        return dataDeNascimento;
+    }
+
+    public void setDataDeNascimento(LocalDate dataDeNascimento) {
+        this.dataDeNascimento = dataDeNascimento;
+    }
+
+    public Set<EnderecoEntity> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(Set<EnderecoEntity> enderecos) {
+        this.enderecos = enderecos;
+    }
 }

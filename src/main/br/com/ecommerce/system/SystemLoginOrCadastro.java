@@ -3,12 +3,14 @@ package br.com.ecommerce.system;
 import java.util.Scanner;
 
 public class SystemLoginOrCadastro {
-    public static void SystemLoginOrCadastro (String[] args) {
+    public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
         int op = 0;
+        int tipoUsuario = 0;
 
         // Menu principal
+
 
         do {
             System.out.println("\n");
@@ -22,7 +24,7 @@ public class SystemLoginOrCadastro {
 
             switch (op) {
                 case 1:
-                    loginUserOrAdm();
+                    loginUserOrAdm(scanner,tipoUsuario);
                     break;
                 case 2:
                     cadastrarUser(scanner);
@@ -32,14 +34,29 @@ public class SystemLoginOrCadastro {
                     break;
                 default:
                     System.out.println("❌Erro! Número digitado é inválido.");
-             }//fecha o switch
+            }//fecha o switch
 
         } while (op != 3);//fecha o while
 
     }//fecha public void SystemLoginOrCadastro
 
-    public static void loginUserOrAdm() {
+
+    public static void loginUserOrAdm(Scanner scanner, int tipoUsuario) {
+
+        System.out.println("\n");
+        System.out.println("Escolha o tipo de usuário para validadorAcesso:");
+        System.out.println("1 - Cliente de Varejo");
+        System.out.println("2 - Cliente de Atacado");
+        System.out.println("3 - Administrador");
+        System.out.print("Digite a opção desejada: ");
+        tipoUsuario = scanner.nextInt();
+
     }
+
+
+
+
+
 
     public static void cadastrarUser(Scanner scanner) {
 

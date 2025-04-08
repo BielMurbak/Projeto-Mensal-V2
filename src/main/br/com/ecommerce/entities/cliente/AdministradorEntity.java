@@ -11,7 +11,10 @@ public class AdministradorEntity {
     private Long id;
 
     @Column(name = "senha", nullable = false, unique = true)
-    private int senha;
+    private String senha;
+
+    public AdministradorEntity() {
+    }
 
     public Long getId() {
         return id;
@@ -21,15 +24,15 @@ public class AdministradorEntity {
         this.id = id;
     }
 
-    public int getSenha() {
+    public String getSenha() {
         return senha;
     }
 
-    public void setSenha(int senha) {
+    public void setSenha(String senha) {
         this.senha = senha;
     }
 
-    public AdministradorEntity(Long id, int senha) {
+    public AdministradorEntity(Long id, String senha) {
         this.id = id;
         this.senha = senha;
     }
@@ -37,4 +40,12 @@ public class AdministradorEntity {
     @OneToOne
     @JoinColumn(name = "pessoa_id")
     private PessoaEntity pessoaEntity;
+
+    public PessoaEntity getPessoaEntity() {
+        return pessoaEntity;
+    }
+
+    public void setPessoaEntity(PessoaEntity pessoaEntity) {
+        this.pessoaEntity = pessoaEntity;
+    }
 }
