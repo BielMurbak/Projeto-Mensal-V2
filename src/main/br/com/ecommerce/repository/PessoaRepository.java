@@ -1,12 +1,12 @@
 package br.com.ecommerce.repository;
 
 
-import br.com.ecommerce.entities.cliente.AdministradorEntity;
+import br.com.ecommerce.entities.cliente.PessoaEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class AdministradorRepository {
+public class PessoaRepository {
 
     private static final SessionFactory sessionFactory;
 
@@ -14,27 +14,28 @@ public class AdministradorRepository {
         sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
     }
 
-    public AdministradorEntity buscarPorId(Long id) {
+    public PessoaEntity buscarPorId(Long id) {
         Session session = sessionFactory.openSession();
-        AdministradorEntity administrador = null;
+        PessoaEntity pessoa = null;
 
         try {
-            administrador = session.get(AdministradorEntity.class, id);
+            pessoa = session.get( PessoaEntity.class, id);
         } finally {
             session.close();
         }
 
-        return administrador;
+        return pessoa;
     }
 
-    public void salvar(AdministradorEntity administrador) {
+    public void salvar( PessoaEntity pessoa) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        session.save(administrador);
+        session.save(pessoa);
 
         session.getTransaction().commit();
         session.close();
     }
+
 
 }

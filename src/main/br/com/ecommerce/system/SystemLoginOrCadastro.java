@@ -1,5 +1,10 @@
 package br.com.ecommerce.system;
 
+import br.com.ecommerce.entities.cliente.AdministradorEntity;
+import br.com.ecommerce.entities.cliente.PessoaEntity;
+import br.com.ecommerce.repository.AdministradorRepository;
+import br.com.ecommerce.repository.PessoaRepository;
+
 import java.util.Scanner;
 
 public class SystemLoginOrCadastro {
@@ -10,7 +15,6 @@ public class SystemLoginOrCadastro {
         int tipoUsuario = 0;
 
         // Menu principal
-
 
         do {
             System.out.println("\n");
@@ -43,19 +47,90 @@ public class SystemLoginOrCadastro {
 
     public static void loginUserOrAdm(Scanner scanner, int tipoUsuario) {
 
-        System.out.println("\n");
-        System.out.println("Escolha o tipo de usuário para validadorAcesso:");
-        System.out.println("1 - Cliente de Varejo");
-        System.out.println("2 - Cliente de Atacado");
-        System.out.println("3 - Administrador");
-        System.out.print("Digite a opção desejada: ");
-        tipoUsuario = scanner.nextInt();
+        do {
+            System.out.println("\n");
+            System.out.println("Escolha o tipo de usuário para entrar:");
+            System.out.println("1 - Cliente de Varejo");
+            System.out.println("2 - Cliente de Atacado");
+            System.out.println("3 - Administrador");
+            System.out.println("4-Encerrar programa");
+            System.out.print("Digite a opção desejada: ");
+            tipoUsuario = scanner.nextInt();
+
+            switch (tipoUsuario) {
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+
+                case 3:
+                    //buscar pelo id 1 na tabela adm
+
+                    AdministradorRepository repoAdm = new AdministradorRepository();
+                    AdministradorEntity admPull = repoAdm.buscarPorId(1L);
+
+                    PessoaRepository repoPessoa = new PessoaRepository();
+                    PessoaEntity pessoaPull = repoPessoa.buscarPorId(1L);
+
+                    clearConsole();
+
+                    scanner.nextLine(); // limpa o Enter que sobrou do nextInt()
+                    System.out.println("Digite seu nome de Administrador: ");
+                    String nomeLoginAdmin = scanner.nextLine(); // agora funciona corretamente
+
+                    System.out.println("Digite sua senha de Administrador: ");
+                    String senhaLoginAdmin = scanner.nextLine(); // funciona também
+
+                    if(nomeLoginAdmin.equals(pessoaPull.getNome())){
+                        if(senhaLoginAdmin.equals(admPull.getSenha())){
+                            SystemAdm sAdm = new SystemAdm();
+                            sAdm.main(null);
+
+                        }else{
+                            System.out.println("❌Erro! Senha nao foi encontrada.");
+                        }
+                    }else{
+                        System.out.println("❌Erro! Nome nao foi encontrada.");
+                    }
+
+                case 4:
+                    System.out.println("✅ Programa foi encerrado com sucesso.");
+                    break;
+
+                default:
+                    System.out.println("❌Erro! Número digitado é inválido.");
+            }
+        }while(tipoUsuario!=4);
 
     }
 
 
 
+    public static void clearConsole() {
+        try {
+            String os = System.getProperty("os.name");
 
+            if (os.contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls")
+                        .inheritIO()
+                        .start()
+                        .waitFor();
+                for(int i=0; i<50; i++){
+                    System.out.println("\n");
+                }
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+                for(int i=0; i<50; i++){
+                    System.out.println("\n");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao limpar o console: " + e.getMessage());
+        }
+    }
 
 
     public static void cadastrarUser(Scanner scanner) {

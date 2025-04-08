@@ -6,8 +6,8 @@
         <property name="hibernate.connection.password">240606</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="hibernate.hbm2ddl.auto">create</property>
-        <property name="hibernate.show_sql">true</property>
-        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.show_sql">false</property>
+        <property name="hibernate.format_sql">false</property>
         <!-- Produto -->
         <mapping class="br.com.ecommerce.entities.produto.ProdutoEntity"/>
         <mapping class="br.com.ecommerce.entities.produto.TenisEntity"/>
@@ -20,5 +20,6 @@
 
         <!-- Compra -->
         <mapping class="br.com.ecommerce.entities.compra.HistoricoDeComprasEntity"/>
+
     </session-factory>
 </hibernate-configuration>

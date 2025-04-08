@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class SystemAdm {
 
-    public static void SystemAdm(String[] args) {
+    public static void main (String[] args) {
 
         Scanner scanner = new Scanner(System.in);
         int op = 0;

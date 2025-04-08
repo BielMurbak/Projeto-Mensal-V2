@@ -2,6 +2,8 @@ package br.com.ecommerce.system;
 
 import br.com.ecommerce.entities.cliente.AdministradorEntity;
 import br.com.ecommerce.entities.cliente.PessoaEntity;
+import br.com.ecommerce.repository.AdministradorRepository;
+import br.com.ecommerce.repository.PessoaRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -19,15 +21,18 @@ public class Main {
 
             System.out.println("Conexão com o banco de dados estabelecida com sucesso!");
 
+
+
             // Iniciar transação
             session.beginTransaction();
 
             // Criar Pessoa
             PessoaEntity pessoa = new PessoaEntity();
+            pessoa.setId(1L);
             pessoa.setNome("Adm");
             pessoa.setIdade(18);
             pessoa.setCpf("123.456.789-01");
-            pessoa.setDataDeNascimento(LocalDate.of(2006, 7, 25)); // Ano, mês, dia
+            pessoa.setDataDeNascimento(LocalDate.of(2006, 7, 25));// Ano, mês, dia
 
             // Salvar pessoa no banco
             session.save(pessoa);
@@ -42,8 +47,6 @@ public class Main {
 
             // Commit da transação
             session.getTransaction().commit();
-
-            System.out.println("Administrador criado com sucesso!");
 
             // Fechar tudo
             session.close();
