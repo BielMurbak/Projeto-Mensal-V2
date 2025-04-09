@@ -41,6 +41,7 @@ public class Main {
             AdministradorEntity adm = new AdministradorEntity();
 
             adm.setSenha("adm2406@");
+            adm.setPessoaEntity(pessoa);
             administradorRepository.salvar(adm);
 
 
