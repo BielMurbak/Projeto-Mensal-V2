@@ -1,6 +1,5 @@
 package br.com.ecommerce.repository;
 
-
 import br.com.ecommerce.entities.cliente.PessoaEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,7 +18,7 @@ public class PessoaRepository {
         PessoaEntity pessoa = null;
 
         try {
-            pessoa = session.get( PessoaEntity.class, id);
+            pessoa = session.get(PessoaEntity.class, id);
         } finally {
             session.close();
         }
@@ -27,15 +26,11 @@ public class PessoaRepository {
         return pessoa;
     }
 
-    public void salvar( PessoaEntity pessoa) {
+    public void salvar(PessoaEntity pessoa) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-
         session.save(pessoa);
-
         session.getTransaction().commit();
         session.close();
     }
-
-
 }

@@ -1,8 +1,7 @@
 package br.com.ecommerce.system;
 
-import br.com.ecommerce.entities.cliente.AdministradorEntity;
+
 import br.com.ecommerce.entities.cliente.PessoaEntity;
-import br.com.ecommerce.repository.AdministradorRepository;
 import br.com.ecommerce.repository.PessoaRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -27,23 +26,17 @@ public class Main {
             session.beginTransaction();
 
             // Criar Pessoa
-            PessoaEntity pessoa = new PessoaEntity();
-            pessoa.setId(1L);
-            pessoa.setNome("Adm");
-            pessoa.setIdade(18);
-            pessoa.setCpf("123.456.789-01");
-            pessoa.setDataDeNascimento(LocalDate.of(2006, 7, 25));// Ano, mês, dia
 
-            // Salvar pessoa no banco
-            session.save(pessoa);
+            PessoaRepository pessoaRepository = new PessoaRepository();
+            PessoaEntity novaPessoa = new PessoaEntity();
 
-            // Criar Administrador
-            AdministradorEntity admin = new AdministradorEntity();
-            admin.setSenha("adm2425%");
-            admin.setPessoaEntity(pessoa);
+            novaPessoa.setNome("João");
+            novaPessoa.setCpf("123.456.789-00");
+            novaPessoa.setDataDeNascimento(LocalDate.of(1994, 5, 20));
 
-            // Salvar administrador no banco
-            session.save(admin);
+            pessoaRepository.salvar(novaPessoa); // salva primeiro
+            System.out.println("Pessoa salva com ID: " + novaPessoa.getId()); // agora sim: ID está preenchido
+
 
             // Commit da transação
             session.getTransaction().commit();

@@ -1,8 +1,6 @@
 package br.com.ecommerce.system;
 
-import br.com.ecommerce.entities.cliente.AdministradorEntity;
 import br.com.ecommerce.entities.cliente.PessoaEntity;
-import br.com.ecommerce.repository.AdministradorRepository;
 import br.com.ecommerce.repository.PessoaRepository;
 
 import java.util.Scanner;
@@ -66,34 +64,18 @@ public class SystemLoginOrCadastro {
                     break;
 
                 case 3:
-                    //buscar pelo id 1 na tabela adm
+                    PessoaRepository pessoaRepository = new PessoaRepository();
 
-                    AdministradorRepository repoAdm = new AdministradorRepository();
-                    AdministradorEntity admPull = repoAdm.buscarPorId(1L);
+                    PessoaEntity pessoa = pessoaRepository.buscarPorId(1L);
 
-                    PessoaRepository repoPessoa = new PessoaRepository();
-                    PessoaEntity pessoaPull = repoPessoa.buscarPorId(1L);
-
-                    clearConsole();
-
-                    scanner.nextLine(); // limpa o Enter que sobrou do nextInt()
-                    System.out.println("Digite seu nome de Administrador: ");
-                    String nomeLoginAdmin = scanner.nextLine(); // agora funciona corretamente
-
-                    System.out.println("Digite sua senha de Administrador: ");
-                    String senhaLoginAdmin = scanner.nextLine(); // funciona também
-
-                    if(nomeLoginAdmin.equals(pessoaPull.getNome())){
-                        if(senhaLoginAdmin.equals(admPull.getSenha())){
-                            SystemAdm sAdm = new SystemAdm();
-                            sAdm.main(null);
-
-                        }else{
-                            System.out.println("❌Erro! Senha nao foi encontrada.");
-                        }
-                    }else{
-                        System.out.println("❌Erro! Nome nao foi encontrada.");
+                    if (pessoa != null) {
+                        System.out.println("nomesuceessoso"+pessoa.getNome());
+                    } else {
+                        System.out.println("Pessoa não encontrada no banco.");
                     }
+
+                    break;
+
 
                 case 4:
                     System.out.println("✅ Programa foi encerrado com sucesso.");
