@@ -1,4 +1,4 @@
-package br.com.ecommerce.repository;
+package  br.com.ecommerce.repository;
 
 
 import br.com.ecommerce.entities.cliente.AdministradorEntity;
@@ -30,11 +30,8 @@ public class AdministradorRepository {
     public void salvar(AdministradorEntity administrador) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-
         session.save(administrador);
-
         session.getTransaction().commit();
         session.close();
     }
-
 }
