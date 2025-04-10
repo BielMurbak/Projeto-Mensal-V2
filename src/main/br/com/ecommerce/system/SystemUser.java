@@ -1,6 +1,10 @@
 package br.com.ecommerce.system;
 
+import java.util.List;
+import java.util.Set;
 import java.util.Scanner;
+import br.com.ecommerce.entities.produto.ProdutoEntity;
+import br.com.ecommerce.repository.ProdutoRepository;
 
 public class SystemUser {
 
@@ -45,6 +49,53 @@ public class SystemUser {
 
 
 public static void nossosProdutos () {
+
+    Scanner scanner = new Scanner(System.in);
+    ProdutoRepository produtoRepo = new ProdutoRepository();
+
+    boolean continuarComprando = true;
+
+    while (continuarComprando) {
+        System.out.println("\n--- Lista de Produtos Disponíveis ---");
+        List<ProdutoEntity> produtos = produtoRepo.listarTodos(); // Você precisa implementar isso no repositório
+
+        for (ProdutoEntity p : produtos) {
+            System.out.println("Nome: " + p.getNome()
+                    + " | Preço: R$" + p.getPreco()
+                    + " | Quantidade: " + p.getQuantidade()
+                    + " | ID: " + p.getId());
+        }
+
+        System.out.print("\nDigite o ID do produto que deseja comprar: ");
+        Long idProduto = scanner.nextLong();
+
+        ProdutoEntity produto = produtoRepo.buscarPorId(idProduto);
+
+        if (produto == null) {
+            System.out.println("Produto não encontrado.");
+            continue;
+        }
+
+        System.out.print("Quantidade que deseja comprar: ");
+        int qtd = scanner.nextInt();
+
+        if (produto.getQuantidade() >= qtd) {
+            produto.setQuantidade(produto.getQuantidade() - qtd);
+            produtoRepo.salvar(produto);
+            System.out.println("Compra realizada com sucesso!");
+        } else {
+            System.out.println("Estoque insuficiente.");
+        }
+
+        System.out.print("\nDeseja comprar outro produto? (s/n): ");
+        String resp = scanner.next();
+
+        if (!resp.equalsIgnoreCase("s")) {
+            continuarComprando = false;
+        }
+    }
+
+    scanner.close();
 }
 
 public static void suporteClienteVarejo () {
@@ -54,6 +105,3 @@ public static void seguracaPrivacidade () {
 }
 
 }//fecha a class System Uuser
-
-
-

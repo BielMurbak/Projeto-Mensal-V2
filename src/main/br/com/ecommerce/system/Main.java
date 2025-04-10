@@ -3,8 +3,10 @@ package br.com.ecommerce.system;
 
 import br.com.ecommerce.entities.cliente.AdministradorEntity;
 import br.com.ecommerce.entities.cliente.PessoaEntity;
+import br.com.ecommerce.entities.produto.ProdutoEntity;
 import br.com.ecommerce.repository.AdministradorRepository;
 import br.com.ecommerce.repository.PessoaRepository;
+import br.com.ecommerce.repository.ProdutoRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -44,6 +46,13 @@ public class Main {
             adm.setPessoaEntity(pessoa);
             administradorRepository.salvar(adm);
 
+            //Criar Produto
+
+            ProdutoEntity produto = new ProdutoEntity("Nike Court Vision", "Tenis", 15, 499.99);
+
+            // Criar uma instância do repositório e salvar
+            ProdutoRepository produtoRepository = new ProdutoRepository();
+            produtoRepository.salvar(produto);
 
             // Commit da transação
             session.getTransaction().commit();
