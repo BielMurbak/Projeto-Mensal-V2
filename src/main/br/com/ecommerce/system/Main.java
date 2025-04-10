@@ -1,12 +1,10 @@
 package br.com.ecommerce.system;
 
 
-import br.com.ecommerce.entities.cliente.AdministradorEntity;
-import br.com.ecommerce.entities.cliente.PessoaEntity;
-import br.com.ecommerce.entities.produto.ProdutoEntity;
-import br.com.ecommerce.repository.AdministradorRepository;
-import br.com.ecommerce.repository.PessoaRepository;
-import br.com.ecommerce.repository.ProdutoRepository;
+import br.com.ecommerce.entities.user.AdministradorEntity;
+import br.com.ecommerce.entities.user.PessoaEntity;
+
+import br.com.ecommerce.tipos.TipoPessoa;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -30,29 +28,26 @@ public class Main {
             session.beginTransaction();
 
             // Criar Pessoa
-
-            PessoaRepository pessoaRepository = new PessoaRepository();
             PessoaEntity pessoa = new PessoaEntity();
-
             pessoa.setNome("adm");
             pessoa.setCpf("123.456.789-00");
             pessoa.setDataDeNascimento(LocalDate.of(2006, 6, 25));
-            pessoaRepository.salvar(pessoa);
+            pessoa.setTipo(TipoPessoa.ADMINISTRADOR);
+            session.save(pessoa);
 
-            AdministradorRepository administradorRepository = new AdministradorRepository();
+            // Criar Administrador com a pessoa já salva
             AdministradorEntity adm = new AdministradorEntity();
-
             adm.setSenha("adm2406@");
             adm.setPessoaEntity(pessoa);
-            administradorRepository.salvar(adm);
+            session.save(adm);
 
             //Criar Produto
 
-            ProdutoEntity produto = new ProdutoEntity("Nike Court Vision", "Tenis", 15, 499.99);
+            //ProdutoEntity produto = new ProdutoEntity("Nike Court Vision", "Tenis", 15, 499.99);
 
             // Criar uma instância do repositório e salvar
-            ProdutoRepository produtoRepository = new ProdutoRepository();
-            produtoRepository.salvar(produto);
+            //ProdutoRepository produtoRepository = new ProdutoRepository();
+           // produtoRepository.salvar(produto);
 
             // Commit da transação
             session.getTransaction().commit();

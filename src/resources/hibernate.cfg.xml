@@ -5,18 +5,17 @@
         <property name="hibernate.connection.username">postgres</property>
         <property name="hibernate.connection.password">postgres</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
         <!-- Produto -->
         <mapping class="br.com.ecommerce.entities.produto.ProdutoEntity"/>
-        <mapping class="br.com.ecommerce.entities.produto.TenisEntity"/>
         <!-- Cliente -->
-        <mapping class="br.com.ecommerce.entities.cliente.PessoaEntity"/>
-        <mapping class="br.com.ecommerce.entities.cliente.ClienteAtacadoEntity"/>
-        <mapping class="br.com.ecommerce.entities.cliente.ClienteVarejoEntity"/>
+        <mapping class="br.com.ecommerce.entities.user.PessoaEntity"/>
+        <mapping class="br.com.ecommerce.entities.user.ClienteAtacadoEntity"/>
+        <mapping class="br.com.ecommerce.entities.user.ClienteVarejoEntity"/>
         <mapping class="br.com.ecommerce.entities.endereco.EnderecoEntity"/>
-        <mapping class="br.com.ecommerce.entities.cliente.AdministradorEntity"/>
+        <mapping class="br.com.ecommerce.entities.user.AdministradorEntity"/>
 
         <!-- Compra -->
         <mapping class="br.com.ecommerce.entities.compra.HistoricoDeComprasEntity"/>

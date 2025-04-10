@@ -1,9 +1,10 @@
 package br.com.ecommerce.system;
 
-import br.com.ecommerce.entities.cliente.AdministradorEntity;
-import br.com.ecommerce.entities.cliente.PessoaEntity;
+import br.com.ecommerce.entities.user.AdministradorEntity;
+import br.com.ecommerce.entities.user.PessoaEntity;
 import br.com.ecommerce.repository.AdministradorRepository;
 import br.com.ecommerce.repository.PessoaRepository;
+import br.com.ecommerce.tipos.TipoPessoa;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -112,8 +113,10 @@ public class SystemAdm {
         pessoa.setNome(nomeAdministrador);
         pessoa.setCpf(cpfAdministrador);
         pessoa.setDataDeNascimento(dataDeNascimentoAdministrador);
+        pessoa.setTipo(TipoPessoa.ADMINISTRADOR);
         PessoaRepository pessoaRepository =new PessoaRepository();
         pessoaRepository.salvar(pessoa);
+
 
         AdministradorEntity admin = new AdministradorEntity();
         admin.setSenha(senhaAdministrador);
@@ -133,10 +136,6 @@ public class SystemAdm {
     public static void removerAdministrador(Scanner scanner) {
         scanner.nextLine();
         System.out.println("\n--Remover Administrador---");
-        System.out.print("Nome do Administrador: ");
-        String nomeAdministradorRemover = scanner.nextLine();
-        System.out.print("Senha do Administrador: ");
-        String senhaAdministradorRemover  = scanner.nextLine();
         System.out.print("CPF do Administrador: ");
         String cpfAdministradorRemover  = scanner.nextLine();
 

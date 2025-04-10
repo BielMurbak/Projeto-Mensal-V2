@@ -1,8 +1,8 @@
 package br.com.ecommerce.repository;
 
 
-import br.com.ecommerce.entities.cliente.PessoaEntity;
-import br.com.ecommerce.entities.produto.ProdutoEntity;
+import br.com.ecommerce.entities.user.AdministradorEntity;
+import br.com.ecommerce.entities.user.PessoaEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -39,36 +39,50 @@ public class PessoaRepository {
         session.close();
     }
 
-    public void deletarPorCpf(String cpf) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = null;
 
-        try {
-            transaction = session.beginTransaction();
+        public void deletarPorCpf(String cpf) {
+            Session session = sessionFactory.openSession();
+            Transaction transaction = null;
 
-            // Busca a pessoa pelo CPF usando HQL
-            PessoaEntity pessoa = session
-                    .createQuery("FROM PessoaEntity WHERE cpf = :cpf", PessoaEntity.class)
-                    .setParameter("cpf", cpf)
-                    .uniqueResult();
+            try {
+                transaction = session.beginTransaction();
 
-            if (pessoa != null) {
-                session.delete(pessoa);
-                transaction.commit();
-                System.out.println("Pessoa deletada com sucesso!");
-            } else {
-                System.out.println("Pessoa com CPF " + cpf + " não encontrada.");
+                // Primeiro, busca o Administrador ligado a essa Pessoa
+                AdministradorEntity admin = session
+                        .createQuery("FROM AdministradorEntity WHERE pessoaEntity.cpf = :cpf", AdministradorEntity.class)
+                        .setParameter("cpf", cpf)
+                        .uniqueResult();
+
+                if (admin != null) {
+                    session.delete(admin); // Deleta o Administrador (vai deletar Pessoa junto se tiver cascade)
+                    transaction.commit();
+                    System.out.println("Administrador e Pessoa deletados com sucesso!");
+                } else {
+                    // Caso não seja um administrador, deleta só a Pessoa
+                    PessoaEntity pessoa = session
+                            .createQuery("FROM PessoaEntity WHERE cpf = :cpf", PessoaEntity.class)
+                            .setParameter("cpf", cpf)
+                            .uniqueResult();
+
+                    if (pessoa != null) {
+                        session.delete(pessoa);
+                        transaction.commit();
+                        System.out.println("Pessoa deletada com sucesso!");
+                    } else {
+                        System.out.println("Pessoa com CPF " + cpf + " não encontrada.");
+                    }
+                }
+
+            } catch (Exception e) {
+                if (transaction != null) transaction.rollback();
+                e.printStackTrace();
+            } finally {
+                session.close();
             }
-
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace();
-        } finally {
-            session.close();
         }
-    }
 
-}
+
+    }
 
 
 

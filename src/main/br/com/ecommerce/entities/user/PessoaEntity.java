@@ -1,14 +1,13 @@
-package br.com.ecommerce.entities.cliente;
+package br.com.ecommerce.entities.user;
 import java.time.LocalDate;
 import java.util.Set;
 import br.com.ecommerce.entities.endereco.EnderecoEntity;
+import br.com.ecommerce.tipos.TipoPessoa;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "pessoa")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
 public class PessoaEntity {
 
     @Id
@@ -23,6 +22,18 @@ public class PessoaEntity {
 
     @Column(name = "dataDeNascimento" ,nullable = false)
     private LocalDate dataDeNascimento;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo", nullable = false)
+    private TipoPessoa tipo;
+
+    public TipoPessoa getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoPessoa tipo) {
+        this.tipo = tipo;
+    }
 
     public Long getId() {
         return id;

@@ -1,7 +1,7 @@
 package  br.com.ecommerce.repository;
 
 
-import br.com.ecommerce.entities.cliente.AdministradorEntity;
+import br.com.ecommerce.entities.user.AdministradorEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

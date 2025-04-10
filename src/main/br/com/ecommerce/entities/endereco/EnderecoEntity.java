@@ -1,5 +1,5 @@
 package br.com.ecommerce.entities.endereco;
-import br.com.ecommerce.entities.cliente.PessoaEntity;
+import br.com.ecommerce.entities.user.PessoaEntity;
 import java.util.Set;
 import javax.persistence.*;
 

@@ -1,7 +1,7 @@
 package br.com.ecommerce.system;
 
-import br.com.ecommerce.entities.cliente.AdministradorEntity;
-import br.com.ecommerce.entities.cliente.PessoaEntity;
+import br.com.ecommerce.entities.user.AdministradorEntity;
+import br.com.ecommerce.entities.user.PessoaEntity;
 import br.com.ecommerce.repository.AdministradorRepository;
 import br.com.ecommerce.repository.PessoaRepository;
 

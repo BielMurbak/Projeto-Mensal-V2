@@ -1,4 +1,4 @@
-package br.com.ecommerce.entities.cliente;
+package br.com.ecommerce.entities.user;
 
 import javax.persistence.*;
 

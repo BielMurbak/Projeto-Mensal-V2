@@ -1,12 +1,11 @@
-package br.com.ecommerce.entities.cliente;
+package br.com.ecommerce.entities.user;
 
 
 import javax.persistence.*;
 
-@DiscriminatorValue("ADM")
-@Entity(name = "Administrador")
-
-public class AdministradorEntity  extends PessoaEntity{
+@Entity
+@Table(name = "administrador")
+public class AdministradorEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,8 +38,8 @@ public class AdministradorEntity  extends PessoaEntity{
         this.senha = senha;
     }
 
-    @OneToOne
-    @JoinColumn(name = "pessoa_id")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "pessoa_id", nullable = false)
     private PessoaEntity pessoaEntity;
 
     public PessoaEntity getPessoaEntity() {
