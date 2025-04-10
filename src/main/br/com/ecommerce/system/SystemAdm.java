@@ -1,5 +1,12 @@
 package br.com.ecommerce.system;
 
+import br.com.ecommerce.entities.cliente.AdministradorEntity;
+import br.com.ecommerce.entities.cliente.PessoaEntity;
+import br.com.ecommerce.repository.AdministradorRepository;
+import br.com.ecommerce.repository.PessoaRepository;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class SystemAdm {
@@ -39,10 +46,10 @@ public class SystemAdm {
                     removerClienteVarejo();
                     break;
                 case 4:
-                    adicionarAdministrador();
+                    adicionarAdministrador(scanner);
                     break;
                 case 5:
-                    removerAdministrador();
+                    removerAdministrador(scanner);
                     break;
                 case 6:
                     listarAdministradores();
@@ -75,6 +82,8 @@ public class SystemAdm {
 
 
     public static void cadastrarProduto() {
+
+
     }
 
     public static void removerProduto() {
@@ -83,10 +92,63 @@ public class SystemAdm {
     public static void removerClienteVarejo() {
     }
 
-    public static void adicionarAdministrador() {
+    public static void adicionarAdministrador(Scanner scanner) {
+        scanner.nextLine();
+        System.out.println("\n--- Adicionar Administrador---");
+        System.out.print("Nome do Administrador: ");
+        String nomeAdministrador = scanner.nextLine();
+        System.out.print("Senha do Administrador: ");
+        String senhaAdministrador  = scanner.nextLine();
+        System.out.print("CPF do Administrador: ");
+        String cpfAdministrador  = scanner.nextLine();
+        System.out.print("Data de nascimento do Administrador: ");
+        String dataDigitada = scanner.nextLine();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        LocalDate dataDeNascimentoAdministrador = LocalDate.parse(dataDigitada, formatter);
+
+    try{
+        PessoaEntity pessoa = new PessoaEntity();
+        pessoa.setNome(nomeAdministrador);
+        pessoa.setCpf(cpfAdministrador);
+        pessoa.setDataDeNascimento(dataDeNascimentoAdministrador);
+        PessoaRepository pessoaRepository =new PessoaRepository();
+        pessoaRepository.salvar(pessoa);
+
+        AdministradorEntity admin = new AdministradorEntity();
+        admin.setSenha(senhaAdministrador);
+        admin.setPessoaEntity(pessoa); // Associa a pessoa ao admin
+
+        AdministradorRepository administradorRepository = new AdministradorRepository();
+        administradorRepository.salvar(admin);
+
+        System.out.println("✅ Administrador adicionado com sucesso!");
+
+    } catch (Exception e) {
+        throw new RuntimeException("Erro ao adicionar administrador: " + e.getMessage(), e);
     }
 
-    public static void removerAdministrador() {
+    }
+
+    public static void removerAdministrador(Scanner scanner) {
+        scanner.nextLine();
+        System.out.println("\n--Remover Administrador---");
+        System.out.print("Nome do Administrador: ");
+        String nomeAdministradorRemover = scanner.nextLine();
+        System.out.print("Senha do Administrador: ");
+        String senhaAdministradorRemover  = scanner.nextLine();
+        System.out.print("CPF do Administrador: ");
+        String cpfAdministradorRemover  = scanner.nextLine();
+
+
+        try{
+            PessoaRepository pessoa = new PessoaRepository();
+            pessoa.deletarPorCpf(cpfAdministradorRemover);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao adicionar administrador: " + e.getMessage(), e);
+        }
+
     }
 
     public static void listarAdministradores() {

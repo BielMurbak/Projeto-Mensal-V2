@@ -1,9 +1,13 @@
 package br.com.ecommerce.repository;
 
+
 import br.com.ecommerce.entities.cliente.PessoaEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+
+
 
 public class PessoaRepository {
 
@@ -33,4 +37,37 @@ public class PessoaRepository {
         session.getTransaction().commit();
         session.close();
     }
+
+    public void deletarPorCpf(String cpf) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            // Busca a pessoa pelo CPF usando HQL
+            PessoaEntity pessoa = session
+                    .createQuery("FROM PessoaEntity WHERE cpf = :cpf", PessoaEntity.class)
+                    .setParameter("cpf", cpf)
+                    .uniqueResult();
+
+            if (pessoa != null) {
+                session.delete(pessoa);
+                transaction.commit();
+                System.out.println("Pessoa deletada com sucesso!");
+            } else {
+                System.out.println("Pessoa com CPF " + cpf + " não encontrada.");
+            }
+
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
 }
+
+
+

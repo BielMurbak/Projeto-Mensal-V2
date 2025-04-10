@@ -27,6 +27,7 @@ public class AdministradorRepository {
         return administrador;
     }
 
+
     public void salvar(AdministradorEntity administrador) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -34,4 +35,5 @@ public class AdministradorRepository {
         session.getTransaction().commit();
         session.close();
     }
+
 }

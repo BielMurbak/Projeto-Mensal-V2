@@ -10,7 +10,7 @@ public class ClienteVarejoEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "senha", nullable = false, unique = true)
+    @Column(name = "senha", nullable = false)
     private int senha;
 
 

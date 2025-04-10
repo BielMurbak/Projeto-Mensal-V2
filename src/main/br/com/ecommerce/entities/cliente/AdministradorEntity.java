@@ -3,14 +3,16 @@ package br.com.ecommerce.entities.cliente;
 
 import javax.persistence.*;
 
+@DiscriminatorValue("ADM")
 @Entity(name = "Administrador")
-public class AdministradorEntity {
+
+public class AdministradorEntity  extends PessoaEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "senha", nullable = false, unique = true)
+    @Column(name = "senha", nullable = true)
     private String senha;
 
     public AdministradorEntity() {

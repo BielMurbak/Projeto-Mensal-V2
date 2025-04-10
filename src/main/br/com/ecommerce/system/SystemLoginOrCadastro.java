@@ -72,6 +72,10 @@ public class SystemLoginOrCadastro {
                     AdministradorRepository administradorRepository = new AdministradorRepository();
                     AdministradorEntity administrador = administradorRepository.buscarPorId(1L);
 
+                    for(int i=0; i<50; i++){
+                        System.out.println("\n");
+                    }
+
                     scanner.nextLine();
 
                     System.out.println("Digite seu nome de Administrador: ");
@@ -106,32 +110,6 @@ public class SystemLoginOrCadastro {
             }
         }while(tipoUsuario!=4);
 
-    }
-
-
-
-    public static void clearConsole() {
-        try {
-            String os = System.getProperty("os.name");
-
-            if (os.contains("Windows")) {
-                new ProcessBuilder("cmd", "/c", "cls")
-                        .inheritIO()
-                        .start()
-                        .waitFor();
-                for(int i=0; i<50; i++){
-                    System.out.println("\n");
-                }
-            } else {
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-                for(int i=0; i<50; i++){
-                    System.out.println("\n");
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao limpar o console: " + e.getMessage());
-        }
     }
 
 

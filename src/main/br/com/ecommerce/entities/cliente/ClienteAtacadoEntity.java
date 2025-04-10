@@ -12,7 +12,7 @@ public class ClienteAtacadoEntity {
     @Column(name = "desconto",nullable = false)
     private double desconto;
 
-    @Column(name = "senha", nullable = false, unique = true)
+    @Column(name = "senha", nullable = false)
         private int senha;
 
     public ClienteAtacadoEntity(int senha, double desconto, Long id) {
