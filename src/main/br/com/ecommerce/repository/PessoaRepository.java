@@ -2,6 +2,7 @@ package br.com.ecommerce.repository;
 
 
 import br.com.ecommerce.entities.cliente.PessoaEntity;
+import br.com.ecommerce.entities.produto.ProdutoEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;

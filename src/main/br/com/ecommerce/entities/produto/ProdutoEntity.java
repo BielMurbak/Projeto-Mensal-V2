@@ -9,37 +9,39 @@ import java.util.List;
 @Entity(name = "produto")
 public class ProdutoEntity {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "tipo", nullable = false)
+    private String tipo;
+
     @Column(name = "nome",nullable = false)
     private String nome;
-
-    @Column(name = "codigo",nullable = false)
-    private int codigo;
 
     @Column(name = "quantidade" ,nullable = false)
     private int quantidade;
 
-    @Column(name = "preço" ,nullable = false)
+    @Column(name = "preco" ,nullable = false)
     private double preco;
-
-    @ManyToOne
-    @JoinColumn(name = "tenis_id")
-    private TenisEntity tenis;
 
     @OneToMany(mappedBy = "produto")
     private List<HistoricoDeComprasEntity> historicos = new ArrayList<>();
 
+    public ProdutoEntity(String nome, String tipo, int quantidade, double preco) {
 
-    public ProdutoEntity(Long id, String nome, int codigo, int quantidade, double preco) {
-        this.id = id;
+        this.tipo = tipo;
         this.nome = nome;
-        this.codigo = codigo;
         this.quantidade = quantidade;
         this.preco = preco;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public Long getId() {
@@ -56,14 +58,6 @@ public class ProdutoEntity {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public int getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
     }
 
     public int getQuantidade() {
