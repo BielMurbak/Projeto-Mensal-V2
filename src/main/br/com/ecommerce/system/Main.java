@@ -33,7 +33,7 @@ public class Main {
             // Criar Pessoa
             PessoaEntity pessoa = new PessoaEntity();
             pessoa.setNome("adm");
-            pessoa.setCpf("123.456.789-00");
+            pessoa.setCpf("12");
             pessoa.setDataDeNascimento(LocalDate.of(2006, 6, 25));
             pessoa.setTipo(TipoPessoa.ADMINISTRADOR);
             session.save(pessoa);

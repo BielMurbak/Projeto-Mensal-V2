@@ -49,4 +49,8 @@ public class AdministradorEntity{
     public void setPessoaEntity(PessoaEntity pessoaEntity) {
         this.pessoaEntity = pessoaEntity;
     }
+
+    public String getCpf() {
+        return null;
+    }
 }
