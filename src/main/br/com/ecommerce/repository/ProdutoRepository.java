@@ -1,7 +1,9 @@
 package br.com.ecommerce.repository;
 
+import br.com.ecommerce.entities.user.AdministradorEntity;
 import br.com.ecommerce.entities.user.PessoaEntity;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.Session;
 import br.com.ecommerce.entities.produto.ProdutoEntity;
@@ -51,4 +53,33 @@ public class ProdutoRepository {
         session.close();
 
     }
+
+    public void deletarNomeProduto(String nome) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            ProdutoEntity produto = session
+                    .createQuery("FROM produto WHERE nome = :nome", ProdutoEntity.class)
+                    .setParameter("nome", nome)
+                    .uniqueResult();
+
+            if (produto != null) {
+                session.delete(produto);
+                transaction.commit();
+                System.out.println("Produto deletado com sucesso.");
+            } else {
+                System.out.println("Produto não encontrado.");
+            }
+
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            session.close();
+        }
+    }
+
 }

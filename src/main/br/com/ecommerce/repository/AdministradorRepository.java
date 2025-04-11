@@ -47,6 +47,8 @@ public class AdministradorRepository {
         }
 
 
+
+
     public AdministradorEntity buscarPorSenha(String senha) {
         Session session = sessionFactory.openSession();
         Transaction transaction = null;

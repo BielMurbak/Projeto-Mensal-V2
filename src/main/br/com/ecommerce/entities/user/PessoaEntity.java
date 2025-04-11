@@ -43,15 +43,6 @@ public class PessoaEntity {
         this.id = id;
     }
 
-    @OneToMany
-    @JoinTable (
-        name = "pessoa_endereco",
-        joinColumns = @JoinColumn(name = "pessoa_id"),
-            inverseJoinColumns = @JoinColumn(name = "endereco_id")
-    )
-
-    private Set<EnderecoEntity> enderecos;
-
     public String getNome() {
         return nome;
     }
@@ -77,12 +68,16 @@ public class PessoaEntity {
         this.dataDeNascimento = dataDeNascimento;
     }
 
-    public Set<EnderecoEntity> getEnderecos() {
-        return enderecos;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "endereco_id") // nome da coluna na tabela pessoa
+    private EnderecoEntity endereco;
+
+    public EnderecoEntity getEndereco() {
+        return endereco;
     }
 
-    public void setEnderecos(Set<EnderecoEntity> enderecos) {
-        this.enderecos = enderecos;
+    public void setEndereco(EnderecoEntity endereco) {
+        this.endereco = endereco;
     }
 
 

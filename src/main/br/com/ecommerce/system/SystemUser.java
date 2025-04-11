@@ -20,7 +20,7 @@ public class SystemUser {
             System.out.println("\n");
             System.out.println("Sistema E-commerce");
             System.out.println("1 - Nossos Produtos");
-            System.out.println("2 - Suporte ao ClienteVarejo");
+            System.out.println("2 - Suporte aos Clientes");
             System.out.println("3 - Seguraça e Privacidade");
             System.out.println("4 - Sair");
             op = scanner.nextInt();

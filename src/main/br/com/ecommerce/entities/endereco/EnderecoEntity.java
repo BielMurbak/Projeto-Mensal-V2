@@ -1,5 +1,7 @@
 package br.com.ecommerce.entities.endereco;
 import br.com.ecommerce.entities.user.PessoaEntity;
+
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 
@@ -25,8 +27,7 @@ public class EnderecoEntity {
     @Column(name = "cep" ,nullable = false)
     private String cep;
 
-    public EnderecoEntity(Long id, String rua, String bairro, String municipio, String estado, String cep) {
-        this.id = id;
+    public EnderecoEntity(String rua, String bairro, String municipio, String estado, String cep) {
         this.rua = rua;
         this.bairro = bairro;
         this.municipio = municipio;
@@ -34,8 +35,9 @@ public class EnderecoEntity {
         this.cep = cep;
     }
 
-    @ManyToMany(mappedBy = "enderecos")
-    private Set<PessoaEntity> pessoas;
+    public EnderecoEntity() {
+    }
+
 
     public Long getId() {
         return id;

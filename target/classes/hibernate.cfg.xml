@@ -9,16 +9,11 @@
         <property name="hibernate.show_sql">false</property>
         <property name="hibernate.format_sql">false</property>
         <property name="hibernate.use_sql_comments">false</property>
-        <!-- Produto -->
         <mapping class="br.com.ecommerce.entities.produto.ProdutoEntity"/>
-        <!-- Cliente -->
         <mapping class="br.com.ecommerce.entities.user.PessoaEntity"/>
-        <mapping class="br.com.ecommerce.entities.user.ClienteAtacadoEntity"/>
-        <mapping class="br.com.ecommerce.entities.user.ClienteVarejoEntity"/>
+        <mapping class="br.com.ecommerce.entities.user.ClienteEntity"/>
         <mapping class="br.com.ecommerce.entities.endereco.EnderecoEntity"/>
         <mapping class="br.com.ecommerce.entities.user.AdministradorEntity"/>
-
-        <!-- Compra -->
         <mapping class="br.com.ecommerce.entities.compra.HistoricoDeComprasEntity"/>
 
     </session-factory>
