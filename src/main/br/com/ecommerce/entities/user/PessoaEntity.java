@@ -49,6 +49,7 @@ public class PessoaEntity {
         joinColumns = @JoinColumn(name = "pessoa_id"),
             inverseJoinColumns = @JoinColumn(name = "endereco_id")
     )
+
     private Set<EnderecoEntity> enderecos;
 
     public String getNome() {

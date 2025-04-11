@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import javax.persistence.NoResultException;
+import java.util.List;
 
 
 public class PessoaRepository {
@@ -74,30 +75,6 @@ public class PessoaRepository {
         } catch (RuntimeException e) {
             if (transaction != null) transaction.rollback();
             throw new RuntimeException("Erro ao buscar pessoa por CPF", e);
-        } finally {
-            session.close();
-        }
-
-        return pessoa;
-    }
-
-    public PessoaEntity buscarPorTipo(TipoPessoa tipo) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = null;
-        PessoaEntity pessoa = null;
-
-        try {
-            transaction = session.beginTransaction();
-
-            pessoa = session
-                    .createQuery("FROM PessoaEntity WHERE tipo = :tipo", PessoaEntity.class)
-                    .setParameter("tipo", tipo)
-                    .uniqueResult();
-
-            transaction.commit();
-        } catch (RuntimeException e) {
-            if (transaction != null) transaction.rollback();
-            throw new RuntimeException("Erro ao buscar pessoa por tipo", e);
         } finally {
             session.close();
         }

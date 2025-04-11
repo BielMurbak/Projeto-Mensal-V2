@@ -2,10 +2,13 @@ package  br.com.ecommerce.repository;
 
 
 import br.com.ecommerce.entities.user.AdministradorEntity;
+import br.com.ecommerce.entities.user.PessoaEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+
+import java.util.List;
 
 public class AdministradorRepository {
 
@@ -27,6 +30,22 @@ public class AdministradorRepository {
 
         return administrador;
     }
+
+    public List<AdministradorEntity> buscarAdm(){
+            Session session = sessionFactory.openSession();
+            List<AdministradorEntity> admSenha = null;
+
+            try {
+                admSenha = session.createQuery("FROM AdministradorEntity a JOIN FETCH a.pessoaEntity", AdministradorEntity.class).list();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            } finally {
+                session.close();
+            }
+
+            return admSenha;
+        }
+
 
     public AdministradorEntity buscarPorSenha(String senha) {
         Session session = sessionFactory.openSession();
