@@ -5,10 +5,16 @@ import br.com.ecommerce.entities.user.PessoaEntity;
 import br.com.ecommerce.repository.AdministradorRepository;
 import br.com.ecommerce.repository.PessoaRepository;
 import br.com.ecommerce.tipos.TipoPessoa;
+import org.hibernate.Session;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import java.util.List;
 import java.util.Scanner;
+
+
+
 
 public class SystemAdm {
 
@@ -53,7 +59,7 @@ public class SystemAdm {
                     removerAdministrador(scanner);
                     break;
                 case 6:
-                    listarAdministradores();
+                   //listarAdministradores();
                     break;
                 case 7:
                     listarProdutos();
@@ -150,8 +156,31 @@ public class SystemAdm {
 
     }
 
-    public static void listarAdministradores() {
-    }
+    //public static void listarAdministradores() {
+     //   PessoaRepository pessoaRepo = new PessoaRepository();
+      //  AdministradorRepository adminRepo = new AdministradorRepository();
+//
+       //  List<PessoaEntity> pessoas = pessoaRepo.buscarPorTipo(TipoPessoa.ADMINISTRADOR);
+
+      //  for (PessoaEntity p : pessoas) {
+        //    System.out.println("Nome: " + p.getNome());
+       //     System.out.println("CPF: " + p.getCpf());
+        //    System.out.println("Data de Nascimento: " + p.getDataNascimento());
+
+        //    if (admin != null) {
+       //         System.out.println("Senha: " + admin.getSenha());
+        //    } else {
+             //   System.out.println("Senha: (administrador não encontrado)");
+        //    }
+
+         //   System.out.println("----------------------------");
+        //}
+   // }
+
+
+
+
+
 
     public static void listarProdutos() {
     }

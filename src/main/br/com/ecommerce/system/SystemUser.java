@@ -1,10 +1,8 @@
 package br.com.ecommerce.system;
 
-import java.util.List;
-import java.util.Set;
+
 import java.util.Scanner;
-import br.com.ecommerce.entities.produto.ProdutoEntity;
-//import br.com.ecommerce.repository.ProdutoRepository;
+
 
 public class SystemUser {
 

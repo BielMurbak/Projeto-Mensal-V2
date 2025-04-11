@@ -83,4 +83,7 @@ public class PessoaEntity {
     public void setEnderecos(Set<EnderecoEntity> enderecos) {
         this.enderecos = enderecos;
     }
+
+
+
 }

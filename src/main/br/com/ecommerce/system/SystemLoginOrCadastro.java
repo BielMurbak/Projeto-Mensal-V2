@@ -66,38 +66,42 @@ public class SystemLoginOrCadastro {
                     break;
 
                 case 3:
+                    scanner.nextLine();
+                    System.out.println("Digite seu nome de Administrador: ");
+                    String nomeLoginAdmin = scanner.nextLine();
+
+                    System.out.println("Digite sua senha de Administrador: ");
+                    String senhaLoginAdmin = scanner.nextLine();
+
+                    System.out.println("Digite o cpf do Adiministrador:");
+                    String cpfLoginAdmin = scanner.nextLine();
+
                     PessoaRepository pessoaRepository = new PessoaRepository();
-                    PessoaEntity pessoa = pessoaRepository.buscarPorId(1L);
+                    PessoaEntity pessoaPorCpf = pessoaRepository.buscarPorCpf(cpfLoginAdmin);
+                    PessoaEntity pessoaPorNome = pessoaRepository.buscarPorNome(nomeLoginAdmin);
 
                     AdministradorRepository administradorRepository = new AdministradorRepository();
-                    AdministradorEntity administrador = administradorRepository.buscarPorId(1L);
+                    AdministradorEntity administrador = administradorRepository.buscarPorSenha(senhaLoginAdmin);
+
 
                     for(int i=0; i<50; i++){
                         System.out.println("\n");
                     }
 
-                    scanner.nextLine();
-
-                    System.out.println("Digite seu nome de Administrador: ");
-                    String nomeLoginAdmin = scanner.nextLine(); // agora funciona corretamente
-
-                    System.out.println("Digite sua senha de Administrador: ");
-                    String senhaLoginAdmin = scanner.nextLine(); // funciona também
-
-
-                    if(nomeLoginAdmin.equals(pessoa.getNome())){
-                        if(senhaLoginAdmin.equals(administrador.getSenha())){
-                            SystemAdm sAdm = new SystemAdm();
-                            sAdm.main(null);
-
-                        }else{
-                            System.out.println("❌Erro! Senha nao foi encontrada.");
-                        }
+                    if(pessoaPorNome==null){
+                        System.out.println("Nome do Usuário não encontrado. Tente novamente.\n");
+                        break;
+                    }else if(pessoaPorCpf==null){
+                        System.out.println("Senha do Usuário não encontrado. Tente novamente.\n");
+                        break;
+                    }else if (pessoaPorCpf==null){
+                        System.out.println("Cpf do Usuário não encontrado. Tente novamente.\n");
+                        break;
                     }else{
-                        System.out.println("❌Erro! Nome nao foi encontrada.");
+                        System.out.println("✅ Login realizado com sucesso como Administrador.");
+                        SystemAdm sAdm = new SystemAdm();
+                        sAdm.main(null);
                     }
-
-
                     break;
 
 

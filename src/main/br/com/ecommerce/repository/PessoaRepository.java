@@ -3,11 +3,13 @@ package br.com.ecommerce.repository;
 
 import br.com.ecommerce.entities.user.AdministradorEntity;
 import br.com.ecommerce.entities.user.PessoaEntity;
+import br.com.ecommerce.tipos.TipoPessoa;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import javax.persistence.NoResultException;
 
 
 public class PessoaRepository {
@@ -30,6 +32,81 @@ public class PessoaRepository {
 
         return pessoa;
     }
+
+    public PessoaEntity buscarPorNome(String nome) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        PessoaEntity  pessoa = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            pessoa= session
+                    .createQuery("FROM PessoaEntity WHERE nome = :nome", PessoaEntity .class)
+                    .setParameter("nome", nome)
+                    .uniqueResult();
+
+            transaction.commit();
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            throw new RuntimeException("Erro ao buscar Administrador por nome", e);
+        } finally {
+            session.close();
+        }
+
+        return pessoa;
+    }
+
+    public PessoaEntity buscarPorCpf(String cpf) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        PessoaEntity pessoa = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            pessoa = session
+                    .createQuery("FROM PessoaEntity WHERE cpf = :cpf", PessoaEntity.class)
+                    .setParameter("cpf", cpf)
+                    .uniqueResult();
+
+            transaction.commit();
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            throw new RuntimeException("Erro ao buscar pessoa por CPF", e);
+        } finally {
+            session.close();
+        }
+
+        return pessoa;
+    }
+
+    public PessoaEntity buscarPorTipo(TipoPessoa tipo) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        PessoaEntity pessoa = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            pessoa = session
+                    .createQuery("FROM PessoaEntity WHERE tipo = :tipo", PessoaEntity.class)
+                    .setParameter("tipo", tipo)
+                    .uniqueResult();
+
+            transaction.commit();
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            throw new RuntimeException("Erro ao buscar pessoa por tipo", e);
+        } finally {
+            session.close();
+        }
+
+        return pessoa;
+    }
+
+
+
 
     public void salvar(PessoaEntity pessoa) {
         Session session = sessionFactory.openSession();
