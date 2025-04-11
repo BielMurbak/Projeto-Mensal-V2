@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Scanner;
 import br.com.ecommerce.entities.produto.ProdutoEntity;
+import br.com.ecommerce.repository.ProdutoRepository;
 //import br.com.ecommerce.repository.ProdutoRepository;
 
 public class SystemUser {
@@ -29,10 +30,10 @@ public class SystemUser {
                     nossosProdutos();
                     break;
                 case 2:
-                    suporteClienteVarejo();
+                    //suporteClienteVarejo();
                     break;
                 case 3:
-                    seguracaPrivacidade();
+                    //seguracaPrivacidade();
                     break;
                 case 4:
                     System.out.println("✅ Programa foi encerrado com sucesso.");
@@ -46,55 +47,59 @@ public class SystemUser {
 
 
     public static void nossosProdutos() {
+        Scanner scanner = new Scanner(System.in);
+        ProdutoRepository produtoRepo = new ProdutoRepository();
 
-        // Scanner scanner = new Scanner(System.in);
-        //ProdutoRepository produtoRepo = new ProdutoRepository();
+        boolean continuarComprando = true;
 
-        //   boolean continuarComprando = true;
+        while (continuarComprando) {
+            System.out.println("\n======= Lista de Produtos Disponíveis =======\n");
+            List<ProdutoEntity> produtos = produtoRepo.listarTodos();
 
-        //   while (continuarComprando) {
-        //System.out.println("\n--- Lista de Produtos Disponíveis ---");
-        //   List<ProdutoEntity> produtos = produtoRepo.listarTodos(); // Você precisa implementar isso no repositório
-//
-        //  for (ProdutoEntity p : produtos) {
-        //  System.out.println("Nome: " + p.getNome()
-        //       + " | Preço: R$" + p.getPreco()
-        //     + " | Quantidade: " + p.getQuantidade()
-        //   + " | ID: " + p.getId());
+            for (ProdutoEntity p : produtos) {
+                System.out.println("Codigo do Produto: " + p.getCodigoProduto()
+                        + " | Tipo: " + p.getTipo()
+                        + " | Nome: " + p.getNome()
+                        + " | Preço: R$" + p.getPreco()
+                        + " | Quantidade: " + p.getQuantidade());
+            }
 
-    // System.out.print("\nDigite o ID do produto que deseja comprar: ");
-    // Long idProduto = scanner.nextLong();
+            System.out.print("\nDigite o código do produto que deseja comprar: ");
+            int codigoProduto = scanner.nextInt();
 
-    // ProdutoEntity produto = produtoRepo.buscarPorId(idProduto);
+            ProdutoEntity produto = produtoRepo.buscarPorCodigo(codigoProduto);
 
-    //  if (produto == null) {
-    //       System.out.println("Produto não encontrado.");
-    //     continue;
+            if (produto == null) {
+                System.out.println("Produto não encontrado.");
+                return;
+            }
 
-    //  System.out.print("Quantidade que deseja comprar: ");
-    //  int qtd = scanner.nextInt();
+            System.out.print("Digite a quantidade que deseja comprar: ");
+            int quantidadeDesejada = scanner.nextInt();
 
-    //  if (produto.getQuantidade() >= qtd) {
-    //    produto.setQuantidade(produto.getQuantidade() - qtd);
-    //     produtoRepo.salvar(produto);
-    //     System.out.println("Compra realizada com sucesso!");
-    //  } else {
-    //      System.out.println("Estoque insuficiente.");
-    //  }
-//
-    //  System.out.print("\nDeseja comprar outro produto? (s/n): ");
-    // String resp = scanner.next();
+            if (quantidadeDesejada <= 0) {
+                System.out.println("Quantidade inválida.");
+                return;
+            }
 
-    //   if (!resp.equalsIgnoreCase("s")) {
-    //      continuarComprando = false;
-    //    }
-    //  }
+            if (produto.getQuantidade() < quantidadeDesejada) {
+                System.out.println("Quantidade insuficiente em estoque.");
+                return;
+            }
 
-    //   scanner.close();
-}
+// Atualiza a quantidade
+            produto.setQuantidade(produto.getQuantidade() - quantidadeDesejada);
+
+// Salva a atualização no banco
+            produtoRepo.atualizar(produto); // usando merge aqui
+
+            System.out.println("Compra realizada com sucesso!");
+        }
+    }
 
 
-public static void suporteClienteVarejo () {
+
+    public static void suporteClienteVarejo () {
 }
 
 public static void seguracaPrivacidade () {

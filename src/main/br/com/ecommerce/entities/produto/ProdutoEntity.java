@@ -1,6 +1,8 @@
 package br.com.ecommerce.entities.produto;
 
 import br.com.ecommerce.entities.compra.HistoricoDeComprasEntity;
+import br.com.ecommerce.tipos.TipoPessoa;
+import br.com.ecommerce.tipos.TipoProduto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,8 +15,9 @@ public class ProdutoEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo", nullable = false)
-    private String tipo;
+    private TipoProduto tipo;
 
     @Column(name = "nome",nullable = false)
     private String nome;
@@ -25,22 +28,30 @@ public class ProdutoEntity {
     @Column(name = "preco" ,nullable = false)
     private double preco;
 
+    @Column(name = "codigo_produto", nullable = false, unique = true)
+    private int codigoProduto;
+
     @OneToMany(mappedBy = "produto")
     private List<HistoricoDeComprasEntity> historicos = new ArrayList<>();
 
-    public ProdutoEntity(String nome, String tipo, int quantidade, double preco) {
+    public ProdutoEntity(String nome, TipoProduto tipo, int quantidade, double preco, int codigoProduto) {
 
         this.tipo = tipo;
         this.nome = nome;
         this.quantidade = quantidade;
         this.preco = preco;
+        this.codigoProduto = codigoProduto;
     }
 
-    public String getTipo() {
+    public ProdutoEntity() {
+        // Construtor vazio para o Hibernate
+    }
+
+    public TipoProduto getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoProduto tipo) {
         this.tipo = tipo;
     }
 
@@ -74,6 +85,14 @@ public class ProdutoEntity {
 
     public void setPreco(double preco) {
         this.preco = preco;
+    }
+
+    public int getCodigoProduto() {
+        return codigoProduto;
+    }
+
+    public void setCodigoProduto(int codigoProduto) {
+        this.codigoProduto = codigoProduto;
     }
 }
 

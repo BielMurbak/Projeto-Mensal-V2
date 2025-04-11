@@ -17,23 +17,30 @@ public class ProdutoRepository {
 
     public List<ProdutoEntity> listarTodos() {
         Session session = sessionFactory.openSession();
-        List<ProdutoEntity> produtos = session.createQuery("FROM ProdutoEntity", ProdutoEntity.class).list();
+        List<ProdutoEntity> produtos = session.createQuery("FROM br.com.ecommerce.entities.produto.ProdutoEntity", ProdutoEntity.class).list();
+
         session.close();
         return produtos;
     }
 
-    public ProdutoEntity buscarPorId(Long id) {
+    public ProdutoEntity buscarPorCodigo(int codigoProduto) {
         Session session = sessionFactory.openSession();
-        ProdutoEntity produto = null;
-
-        try {
-            produto = session.get(ProdutoEntity.class, id);
-        } finally {
-            session.close();
-        }
-
+        ProdutoEntity produto = session
+                .createQuery("FROM br.com.ecommerce.entities.produto.ProdutoEntity WHERE codigoProduto = :codigo", ProdutoEntity.class)
+                .setParameter("codigo", codigoProduto)
+                .uniqueResult();
+        session.close();
         return produto;
+    }
 
+    public void atualizar(ProdutoEntity produto) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        session.merge(produto); // Atualiza o produto já existente
+
+        session.getTransaction().commit();
+        session.close();
     }
 
     public void salvar(ProdutoEntity produto) {
