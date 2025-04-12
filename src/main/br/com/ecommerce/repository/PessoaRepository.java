@@ -15,7 +15,7 @@ import java.util.List;
 
 public class PessoaRepository {
 
-    private static final SessionFactory sessionFactory;
+    public static final SessionFactory sessionFactory;
 
     static {
         sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();

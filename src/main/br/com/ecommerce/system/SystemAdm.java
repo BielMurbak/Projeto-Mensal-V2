@@ -358,13 +358,12 @@ public class SystemAdm {
             outrapessoa.setCpf(cpf);
             outrapessoa.setDataDeNascimento(dataNascimento);
             outrapessoa.setTipo(tipoCliente == 1 ? TipoPessoa.CLIENTE_ATACADO : TipoPessoa.CLIENTE_VAREJO);
-            outrapessoa.setEndereco(endereco);
 
          pessoaRepository.salvar(outrapessoa);
 
             ClienteEntity cliente = new ClienteEntity();
             cliente.setPessoa(outrapessoa);
-            cliente.setSenha(Integer.parseInt(senha));
+            cliente.setSenha(senha);
 
             clienteRepository.salvar(cliente);
 

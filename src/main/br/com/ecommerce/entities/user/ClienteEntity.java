@@ -13,14 +13,13 @@ public class ClienteEntity {
     private Long id;
 
     @Column(name = "senha", nullable = false)
-    private int senha;
+    private String senha;
 
-
-    public int getSenha() {
+    public String getSenha() {
         return senha;
     }
 
-    public void setSenha(int senha) {
+    public void setSenha(String senha) {
         this.senha = senha;
     }
 
@@ -39,6 +38,7 @@ public class ClienteEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
     private EnderecoEntity enderecoEntity;
+
 
 
 

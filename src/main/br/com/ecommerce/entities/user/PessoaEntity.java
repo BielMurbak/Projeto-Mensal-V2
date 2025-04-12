@@ -68,17 +68,8 @@ public class PessoaEntity {
         this.dataDeNascimento = dataDeNascimento;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "endereco_id") // nome da coluna na tabela pessoa
-    private EnderecoEntity endereco;
 
-    public EnderecoEntity getEndereco() {
-        return endereco;
-    }
 
-    public void setEndereco(EnderecoEntity endereco) {
-        this.endereco = endereco;
-    }
 
 
 

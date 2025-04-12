@@ -2,9 +2,21 @@ package br.com.ecommerce.system;
 
 import java.util.List;
 import java.util.Scanner;
+
+import br.com.ecommerce.entities.compra.HistoricoDeComprasEntity;
+import br.com.ecommerce.entities.endereco.EnderecoEntity;
 import br.com.ecommerce.entities.produto.ProdutoEntity;
+import br.com.ecommerce.entities.user.ClienteEntity;
 import br.com.ecommerce.payments.Pix;
+import br.com.ecommerce.repository.HistoricoDeComprasRepository;
 import br.com.ecommerce.repository.ProdutoRepository;
+import br.com.ecommerce.tipos.*;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+
+import org.hibernate.query.Query;
+
+import static br.com.ecommerce.repository.PessoaRepository.sessionFactory;
 
 
 public class SystemUser {
@@ -14,7 +26,6 @@ public class SystemUser {
         Scanner scanner = new Scanner(System.in);
         int op = 0;
         double total = 0;
-
         // Menu principal
 
         do {
@@ -114,7 +125,7 @@ public class SystemUser {
             Pix pix = new Pix();
 
 
-            System.out.println("1-Pix:");
+            System.out.println("1-Pix");
             System.out.println("2-Dinheiro");
             System.out.println("3-Cartao de debito");
             System.out.println("4-Cartao de credito");
@@ -124,6 +135,171 @@ public class SystemUser {
             switch (formaDePagamento) {
                 case 1:
                     pix.formaDePagamentoPix(total);
+                    System.out.println("\n");
+                    System.out.println("---- Escolha a opção de recebimento ----");
+                    System.out.println("1 - Entrega");
+                    System.out.println("2 - Retirada na loja");
+                    System.out.print("Digite sua opção: ");
+                    int opcaoRecebimento = scanner.nextInt();
+                    scanner.nextLine();
+
+                    ClienteEntity cliente = null; // declarar fora
+
+                    if(opcaoRecebimento == 1) {
+                        System.out.println("Digite o cpf do cliente: ");
+                        String cpf = scanner.nextLine();
+
+                        Session session = null;
+                        try {
+                            session = sessionFactory.openSession();
+                            session.beginTransaction();
+
+                            Query query = session.createQuery("FROM cliente c WHERE c.pessoa.cpf = :cpf");
+                            query.setParameter("cpf", cpf);
+
+                            cliente = (ClienteEntity) query.uniqueResult(); // agora atribui aqui
+
+                            if (cliente != null && cliente.getEnderecoEntity() != null) {
+                                EnderecoEntity endereco = cliente.getEnderecoEntity();
+                                System.out.println("Rua: " + endereco.getRua());
+                                System.out.println("Bairro: " + endereco.getBairro());
+                                System.out.println("Município: " + endereco.getMunicipio());
+                                System.out.println("Estado: " + endereco.getEstado());
+                                System.out.println("CEP: " + endereco.getCep());
+                            } else {
+                                System.out.println("Cliente com CPF " + cpf + " não encontrado ou sem endereço cadastrado.");
+                            }
+
+                            session.getTransaction().commit();
+
+                        } catch (HibernateException e) {
+                            if (session != null) session.getTransaction().rollback();
+                            System.out.println("Erro ao buscar endereço: " + e.getMessage());
+                        } finally {
+                            if (session != null) {
+                                session.close();
+                            }
+                        }
+
+            }else{
+                        System.out.println("Nosso endereço:");
+                        System.out.println("Rua:Azulão");
+                        System.out.println("Bairro: Morumbi");
+                        System.out.println("Município: Foz do Iguaçu");
+                        System.out.println("Estado: Paraná");
+                        System.out.println("CEP: 85867-000");
+                        System.out.println("\n");
+                    }
+
+
+                    System.out.println("Escolha o método de frete:");
+                    System.out.println("1 - Frete Padrão");
+                    System.out.println("2 - Frete Expresso");
+                    int opcaoFrete = scanner.nextInt();
+
+                    if(opcaoFrete==1) {
+                        double totalComFormaDePamento = pix.formaDePagamentoPix(total);
+
+                        try {
+                            HistoricoDeComprasEntity historicoDeCompras = new HistoricoDeComprasEntity();
+                            HistoricoDeComprasRepository historicoDeComprasRepository = new HistoricoDeComprasRepository();
+
+                            // Tipo de frete
+                            historicoDeCompras.setTipoDeFrete(TipoDeFrete.Padrao);
+
+                            // Forma de pagamento
+                            if (formaDePagamento == 1) {
+                                historicoDeCompras.setTipoCompra(TipoCompra.Pix);
+                            } else if (formaDePagamento == 2) {
+                                historicoDeCompras.setTipoCompra(TipoCompra.Dinheiro);
+                            } else if (formaDePagamento == 3) {
+                                historicoDeCompras.setTipoCompra(TipoCompra.CartaoDebito);
+                            } else {
+                                historicoDeCompras.setTipoCompra(TipoCompra.CartaoCredito);
+                            }
+
+                            // Tipo de pessoa, produto e recebimento
+                            historicoDeCompras.setTipo(TipoPessoa.CLIENTE_VAREJO);  // Certifique-se de que esses valores estão corretos
+                            historicoDeCompras.setTipoProduto(TipoProduto.TENIS);  // Certifique-se de que esses valores estão corretos
+                            historicoDeCompras.setTipoRecebimento(TipoRecebimento.Entrega);  // Certifique-se de que esses valores estão corretos
+                            historicoDeCompras.setNomeCliente("rafael");
+
+                            // Total da compra
+                            historicoDeCompras.setTotal(totalComFormaDePamento);  // Verifique se totalComFormaDePamento está definido corretamente
+
+
+                            // Salva no repositório
+                            historicoDeComprasRepository.salvar(historicoDeCompras);
+
+                            System.out.println("\n===== HISTÓRICO DE COMPRA =====");
+                            System.out.println("Tipo de Frete: " + historicoDeCompras.getTipoDeFrete());
+                            System.out.println("Forma de Pagamento: " + historicoDeCompras.getTipoCompra());
+                            System.out.println("Tipo de Pessoa: " + historicoDeCompras.getTipo());
+                            System.out.println("Tipo de Produto: " + historicoDeCompras.getTipoProduto());
+                            System.out.println("Tipo de Recebimento: " + historicoDeCompras.getTipoRecebimento());
+                            System.out.println("Total da Compra: R$ " + String.format("%.2f", historicoDeCompras.getTotal()));
+
+                        } catch (Exception e) {
+                            throw new RuntimeException("Erro ao salvar histórico de compras", e);
+
+
+                        }
+
+
+                    }else if(opcaoFrete==2){
+                        double totalComFormaDePamento = pix.formaDePagamentoPix(total);
+                        double aux = totalComFormaDePamento;
+                        totalComFormaDePamento = aux * 0.20;
+                        HistoricoDeComprasEntity historicoDeCompras = new HistoricoDeComprasEntity();
+                        HistoricoDeComprasRepository historicoDeComprasRepository = new HistoricoDeComprasRepository();
+
+                        try {
+
+                            // Tipo de frete
+                            historicoDeCompras.setTipoDeFrete(TipoDeFrete.Expresso);
+
+                            // Forma de pagamento
+                            if (formaDePagamento == 1) {
+                                historicoDeCompras.setTipoCompra(TipoCompra.Pix);
+                            } else if (formaDePagamento == 2) {
+                                historicoDeCompras.setTipoCompra(TipoCompra.Dinheiro);
+                            } else if (formaDePagamento == 3) {
+                                historicoDeCompras.setTipoCompra(TipoCompra.CartaoDebito);
+                            } else {
+                                historicoDeCompras.setTipoCompra(TipoCompra.CartaoCredito);
+                            }
+
+                            // Tipo de pessoa, produto e recebimento (confirme se esses valores são fixos ou dinâmicos)
+                            historicoDeCompras.setTipo(TipoPessoa.CLIENTE_VAREJO);
+                            historicoDeCompras.setTipoProduto(TipoProduto.TENIS);
+                            historicoDeCompras.setTipoRecebimento(TipoRecebimento.Entrega);
+
+                            // Total da compra
+                            historicoDeCompras.setTotal(totalComFormaDePamento); // verifique se essa variável está correta
+
+                            // Salva no repositório
+                            historicoDeComprasRepository.salvar(historicoDeCompras);
+
+
+                        } catch (Exception e) {
+                            throw new RuntimeException("Erro ao salvar histórico de compras", e);
+                        }
+
+                        System.out.println("\n===== HISTÓRICO DE COMPRA =====");
+                        System.out.println("Tipo de Frete: " + historicoDeCompras.getTipoDeFrete());
+                        System.out.println("Forma de Pagamento: " + historicoDeCompras.getTipoCompra());
+                        System.out.println("Tipo de Pessoa: " + historicoDeCompras.getTipo());
+                        System.out.println("Tipo de Produto: " + historicoDeCompras.getTipoProduto());
+                        System.out.println("Tipo de Recebimento: " + historicoDeCompras.getTipoRecebimento());
+                        System.out.println("Total da Compra: R$ " + String.format("%.2f", historicoDeCompras.getTotal()));
+                        totalComFormaDePamento = 0;
+                        SystemUser sU = new SystemUser();
+                        SystemUser.main(null);
+
+                    }else{
+                        System.out.println("Erro! Entrada invalida");
+                    }
+
                     break;
 
                 case 2:
@@ -212,6 +388,7 @@ public class SystemUser {
                     break;
                 case 2:
                     System.out.println("Função de alteração de senha ainda não implementada.");
+
                     break;
                 case 3:
                     System.out.println("Função de alteração de nome ainda não implementada.");
@@ -228,5 +405,71 @@ public class SystemUser {
 
         } while (true);
     }
+
+    public static void entrega(Scanner scanner) {
+
+        System.out.println("\n");
+        System.out.println("---- Escolha a opção de recebimento ----");
+        System.out.println("1 - Entrega");
+        System.out.println("2 - Retirada na loja");
+        System.out.print("Digite sua opção: ");
+        int opcaoRecebimento = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (opcaoRecebimento) {
+            case 1:
+                System.out.println("Digite o cpf do cliente: ");
+                String cpf = scanner.nextLine();
+
+                Session session = null;
+                try {
+                    session = sessionFactory.openSession();
+                    session.beginTransaction();  // Abrir a transação
+
+                    Query query = session.createQuery("FROM cliente c WHERE c.pessoa.cpf = :cpf");
+                    query.setParameter("cpf", cpf);
+
+                    ClienteEntity cliente = (ClienteEntity) query.uniqueResult();
+
+                    if (cliente != null && cliente.getEnderecoEntity() != null) {
+                        System.out.println("Nome: " + cliente.getPessoa().getNome()); // <--
+                        EnderecoEntity endereco = cliente.getEnderecoEntity();
+                        System.out.println("Rua: " + endereco.getRua());
+                        System.out.println("Bairro: " + endereco.getBairro());
+                        System.out.println("Município: " + endereco.getMunicipio());
+                        System.out.println("Estado: " + endereco.getEstado());
+                        System.out.println("CEP: " + endereco.getCep());
+                    } else {
+                        System.out.println("Cliente com CPF " + cpf + " não encontrado ou sem endereço cadastrado.");
+                    }
+
+                    session.getTransaction().commit();  // Commit da transação
+
+                } catch (HibernateException e) {
+                    if (session != null) session.getTransaction().rollback();  // Rollback em caso de erro
+                    System.out.println("Erro ao buscar endereço: " + e.getMessage());
+                } finally {
+                    if (session != null) {
+                        session.close();  // Fechar a sessão
+                    }
+                }
+                break;
+
+            case 2:
+                System.out.println("Nosso endereço");
+                System.out.println("Rua:Azulão");
+                System.out.println("Bairro: Morumbi");
+                System.out.println("Município: Foz do Iguaçu");
+                System.out.println("Estado: Paraná");
+                System.out.println("CEP: 85867-000");
+            break;
+
+            default:
+                System.out.println("Erro! opcao invalida");
+        }
+    }
+
+
+
 
 }//fecha a class System Uuser

@@ -1,8 +1,10 @@
 package br.com.ecommerce.system;
 
 
+import br.com.ecommerce.entities.endereco.EnderecoEntity;
 import br.com.ecommerce.entities.produto.ProdutoEntity;
 import br.com.ecommerce.entities.user.AdministradorEntity;
+import br.com.ecommerce.entities.user.ClienteEntity;
 import br.com.ecommerce.entities.user.PessoaEntity;
 
 import br.com.ecommerce.repository.ProdutoRepository;
@@ -26,22 +28,44 @@ public class Main {
             System.out.println("Conexão com o banco de dados estabelecida com sucesso!");
 
 
-
             // Iniciar transação
             session.beginTransaction();
 
-            // Criar Pessoa
-            PessoaEntity pessoa = new PessoaEntity();
-            pessoa.setNome("adm");
-            pessoa.setCpf("12");
-            pessoa.setDataDeNascimento(LocalDate.of(2006, 6, 25));
-            pessoa.setTipo(TipoPessoa.ADMINISTRADOR);
-            session.save(pessoa);
+            //Criar um cliente
+            ClienteEntity cliente = new ClienteEntity();
+            PessoaEntity pessoaCliente = new PessoaEntity();
+            EnderecoEntity endereco = new EnderecoEntity();
 
-            // Criar Administrador com a pessoa já salva
             AdministradorEntity adm = new AdministradorEntity();
-            adm.setSenha("adm2406@");
-            adm.setPessoaEntity(pessoa);
+            PessoaEntity pessoaAdm = new PessoaEntity();
+
+           // Pessoa do cliente
+            pessoaCliente.setTipo(TipoPessoa.CLIENTE_VAREJO);
+            pessoaCliente.setNome("Adryan");
+            pessoaCliente.setCpf("279.641.580-40");
+            pessoaCliente.setDataDeNascimento(LocalDate.of(2006, 7, 25));
+
+            // Endereço do cliente
+            endereco.setRua("Bem-te-vi");
+            endereco.setBairro("Morumbi");
+            endereco.setMunicipio("Foz do Iguaçu");
+            endereco.setCep("85850-111");
+            endereco.setEstado("PR");
+
+            cliente.setSenha("2507@");
+            cliente.setPessoa(pessoaCliente);
+            cliente.setEnderecoEntity(endereco);
+
+            // Pessoa do administrador
+            pessoaAdm.setTipo(TipoPessoa.ADMINISTRADOR);
+            pessoaAdm.setNome("Biel");
+            pessoaAdm.setCpf("093.777.222-01");
+            pessoaAdm.setDataDeNascimento(LocalDate.of(2006, 7, 21));
+
+            adm.setSenha("adm!!");
+            adm.setPessoaEntity(pessoaAdm);
+
+            session.save(cliente);
             session.save(adm);
 
             //Criar Produto

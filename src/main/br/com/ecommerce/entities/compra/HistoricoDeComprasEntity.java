@@ -1,9 +1,8 @@
 package br.com.ecommerce.entities.compra;
 
 
-import br.com.ecommerce.entities.produto.ProdutoEntity;
-import br.com.ecommerce.entities.user.ClienteEntity;
-import br.com.ecommerce.tipos.TipoPessoa;
+
+import br.com.ecommerce.tipos.*;
 
 import javax.persistence.*;
 
@@ -18,28 +17,48 @@ public class HistoricoDeComprasEntity {
     @Column(name = "totalDaCompra" ,nullable = false)
     private double total;
 
+
+    @Column(name = "nomeCliente" ,nullable = false)
+    private String nomeCliente;
+
+    public String getNomeCliente() {
+        return nomeCliente;
+    }
+
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
+    }
+
     @Column(name = "quantidadeComprada", nullable = false)
     private int quantidade;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private ClienteEntity cliente;
-
-    @ManyToOne
-    @JoinColumn(name = "produto_id", nullable = false)
-    private ProdutoEntity produto;
-
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo", nullable = false)
+    @Column(name = "tipoUser", nullable = false)
     private TipoPessoa tipo;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipoDeFrete", nullable = false)
+    private TipoDeFrete tipoDeFrete;
 
-    public TipoPessoa getTipo() {
-        return tipo;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipoCompra", nullable = false)
+    private TipoCompra tipoCompra;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipoProduto", nullable = false)
+    private TipoProduto tipoProduto;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipoRecebimento", nullable = false)
+    private TipoRecebimento tipoRecebimento;
+
+    public TipoRecebimento getTipoRecebimento() {
+        return tipoRecebimento;
     }
 
-    public void setTipo(TipoPessoa tipo) {
-        this.tipo = tipo;
+    public void setTipoRecebimento(TipoRecebimento tipoRecebimento) {
+        this.tipoRecebimento = tipoRecebimento;
     }
 
     public Long getId() {
@@ -54,15 +73,49 @@ public class HistoricoDeComprasEntity {
         return total;
     }
 
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
     public int getQuantidade() {
         return quantidade;
     }
 
-    public ClienteEntity getCliente() {
-        return cliente;
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 
-    public ProdutoEntity getProduto() {
-        return produto;
+
+
+    public TipoPessoa getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoPessoa tipo) {
+        this.tipo = tipo;
+    }
+
+    public TipoDeFrete getTipoDeFrete() {
+        return tipoDeFrete;
+    }
+
+    public void setTipoDeFrete(TipoDeFrete tipoDeFrete) {
+        this.tipoDeFrete = tipoDeFrete;
+    }
+
+    public TipoCompra getTipoCompra() {
+        return tipoCompra;
+    }
+
+    public void setTipoCompra(TipoCompra tipoCompra) {
+        this.tipoCompra = tipoCompra;
+    }
+
+    public TipoProduto getTipoProduto() {
+        return tipoProduto;
+    }
+
+    public void setTipoProduto(TipoProduto tipoProduto) {
+        this.tipoProduto = tipoProduto;
     }
 }

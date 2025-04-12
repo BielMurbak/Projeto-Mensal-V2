@@ -13,8 +13,8 @@ public class SystemLoginOrCadastro {
         Scanner scanner = new Scanner(System.in);
         int op = 0;
         int tipoUsuario = 0;
-int contadorAtacado = 0;
-int contadorVarejo = 0;
+        int contadorAtacado = 0;
+        int contadorVarejo = 0;
         // Menu principal
 
         do {

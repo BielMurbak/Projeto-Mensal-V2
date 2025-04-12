@@ -31,8 +31,6 @@ public class ProdutoEntity {
     @Column(name = "codigo_produto", nullable = false, unique = true)
     private int codigoProduto;
 
-    @OneToMany(mappedBy = "produto")
-    private List<HistoricoDeComprasEntity> historicos = new ArrayList<>();
 
     public ProdutoEntity(String nome, TipoProduto tipo, int quantidade, double preco, int codigoProduto) {
 

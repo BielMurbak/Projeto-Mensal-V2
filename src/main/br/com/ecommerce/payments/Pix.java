@@ -5,7 +5,7 @@ import br.com.ecommerce.system.SystemLoginOrCadastro;
 public class Pix {
 
     public double formaDePagamentoPix(Double total) {
-        double desconto;
+        double desconto = 0;
 
         if (SystemLoginOrCadastro.SessaoUsuario.tipoClienteLogado == 2) {
             // Cliente de Atacado: 15% de desconto
