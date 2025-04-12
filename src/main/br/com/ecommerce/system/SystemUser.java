@@ -1,11 +1,11 @@
 package br.com.ecommerce.system;
 
 import java.util.List;
-import java.util.Set;
 import java.util.Scanner;
 import br.com.ecommerce.entities.produto.ProdutoEntity;
+import br.com.ecommerce.payments.Pix;
 import br.com.ecommerce.repository.ProdutoRepository;
-//import br.com.ecommerce.repository.ProdutoRepository;
+
 
 public class SystemUser {
 
@@ -13,6 +13,7 @@ public class SystemUser {
 
         Scanner scanner = new Scanner(System.in);
         int op = 0;
+        double total = 0;
 
         // Menu principal
 
@@ -27,7 +28,7 @@ public class SystemUser {
 
             switch (op) {
                 case 1:
-                    nossosProdutos();
+                    nossosProdutos(total);
                     break;
                 case 2:
                     //suporteClienteVarejo();
@@ -46,7 +47,7 @@ public class SystemUser {
     }//fecha a public static void SystemUser
 
 
-    public static void nossosProdutos() {
+    public static void nossosProdutos(double total ) {
         Scanner scanner = new Scanner(System.in);
         ProdutoRepository produtoRepo = new ProdutoRepository();
 
@@ -94,6 +95,53 @@ public class SystemUser {
             produtoRepo.atualizar(produto); // usando merge aqui
 
             System.out.println("Compra realizada com sucesso!");
+
+            total += quantidadeDesejada * produto.getPreco();
+
+            scanner.nextLine(); // limpa o buffer antes de ler string
+            System.out.println("Deseja continuar comprando? (sim ou nao) ");
+            String op = scanner.nextLine().toLowerCase();
+
+            if (op.equals("sim") || op.equals("s")) {
+                continuarComprando = true;
+            } else if (op.equals("nao") || op.equals("n")) {
+                continuarComprando = false;
+            } else {
+                System.out.println("Erro! Entrada inválida.");
+                continuarComprando = false;
+            }
+
+            Pix pix = new Pix();
+
+
+            System.out.println("1-Pix:");
+            System.out.println("2-Dinheiro");
+            System.out.println("3-Cartao de debito");
+            System.out.println("4-Cartao de credito");
+            System.out.println("Escolha a forma de pagamento:");
+            int formaDePagamento = scanner.nextInt();
+
+            switch (formaDePagamento) {
+                case 1:
+                    pix.formaDePagamentoPix(total);
+                    break;
+
+                case 2:
+
+                    break;
+
+                case 3:
+
+                    break;
+
+                case 4:
+
+                    break;
+
+                default:
+                    System.out.println("Erro! Entrava invalida ");
+            }
+
         }
     }
 

@@ -13,7 +13,8 @@ public class SystemLoginOrCadastro {
         Scanner scanner = new Scanner(System.in);
         int op = 0;
         int tipoUsuario = 0;
-
+int contadorAtacado = 0;
+int contadorVarejo = 0;
         // Menu principal
 
         do {
@@ -45,6 +46,10 @@ public class SystemLoginOrCadastro {
     }//fecha public void SystemLoginOrCadastro
 
 
+    public class SessaoUsuario {
+        public static int tipoClienteLogado = 0; // 0 = nenhum, 1 = varejo, 2 = atacado
+    }
+
     public static void loginUserOrAdm(Scanner scanner, int tipoUsuario) {
 
         do {
@@ -59,14 +64,15 @@ public class SystemLoginOrCadastro {
 
             switch (tipoUsuario) {
                 case 1:
-
+                    SessaoUsuario.tipoClienteLogado = 1;
                     break;
                 case 2:
-
+                    SessaoUsuario.tipoClienteLogado = 2;
                     break;
 
                 case 3:
                     scanner.nextLine();
+
                     System.out.println("Digite seu nome de Administrador: ");
                     String nomeLoginAdmin = scanner.nextLine();
 
