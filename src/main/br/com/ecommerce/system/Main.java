@@ -70,11 +70,15 @@ public class Main {
 
             //Criar Produto
 
-            ProdutoEntity produto = new ProdutoEntity("Nike Court Vision", TipoProduto.TENIS, 15, 499.99, 1);
+            ProdutoEntity produto1 = new ProdutoEntity("Nike Court Vision", TipoProduto.TENIS, 15, 499.99, 1);
+            ProdutoEntity produto2 = new ProdutoEntity("Adidas Superstar", TipoProduto.TENIS, 20, 379.90, 2);
+            ProdutoEntity produto3 = new ProdutoEntity("Camiseta Básica", TipoProduto.CAMISA, 50, 59.99, 3);
 
-             //Criar uma instância do repositório e salvar
+            //Criar uma instância do repositório e salvar
             ProdutoRepository produtoRepository = new ProdutoRepository();
-            session.save(produto);
+            session.save(produto1);
+            session.save(produto2);
+            session.save(produto3);
 
             // Commit da transação
             session.getTransaction().commit();

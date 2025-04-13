@@ -19,7 +19,10 @@ public class ProdutoRepository {
 
     public List<ProdutoEntity> listarTodos() {
         Session session = sessionFactory.openSession();
-        List<ProdutoEntity> produtos = session.createQuery("FROM br.com.ecommerce.entities.produto.ProdutoEntity", ProdutoEntity.class).list();
+        List<ProdutoEntity> produtos = session.createQuery(
+                "FROM br.com.ecommerce.entities.produto.ProdutoEntity ORDER BY codigoProduto",
+                ProdutoEntity.class
+        ).list();
 
         session.close();
         return produtos;
