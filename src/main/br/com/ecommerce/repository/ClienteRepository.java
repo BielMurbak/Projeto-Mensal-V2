@@ -2,6 +2,7 @@ package br.com.ecommerce.repository;
 
 
 
+import br.com.ecommerce.entities.user.AdministradorEntity;
 import br.com.ecommerce.entities.user.ClienteEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -25,6 +26,30 @@ public class ClienteRepository {
         session.save(cliente);
         session.getTransaction().commit();
         session.close();
+    }
+
+    public ClienteEntity buscarPorSenha(String senha) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        ClienteEntity cliente = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+          cliente = session
+                    .createQuery("FROM cliente WHERE senha = :senha", ClienteEntity.class)
+                    .setParameter("senha", senha)
+                    .uniqueResult();
+
+            transaction.commit();
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            throw new RuntimeException("Erro ao buscar cliente por senha", e);
+        } finally {
+            session.close();
+        }
+
+        return cliente;
     }
 
     public List<ClienteEntity> buscarCliente(){
