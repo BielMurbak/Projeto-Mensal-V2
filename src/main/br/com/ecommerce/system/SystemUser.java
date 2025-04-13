@@ -65,7 +65,10 @@ public class SystemUser {
         boolean continuarComprando = true;
 
         while (continuarComprando) {
-            System.out.println("\n======= Lista de Produtos Disponíveis =======\n");
+            System.out.println("\n=======================================");
+            System.out.println("======= E - Commerce GRs Street =======");
+            System.out.println("=============== Produtos  =============");
+            System.out.println("=======================================\n");
             List<ProdutoEntity> produtos = produtoRepo.listarTodos();
 
             for (ProdutoEntity p : produtos) {
@@ -83,7 +86,7 @@ public class SystemUser {
 
             if (produto == null) {
                 System.out.println("Produto não encontrado.");
-                return;
+                continue;
             }
 
             System.out.print("Digite a quantidade que deseja comprar: ");
@@ -91,38 +94,31 @@ public class SystemUser {
 
             if (quantidadeDesejada <= 0) {
                 System.out.println("Quantidade inválida.");
-                return;
+                continue;
             }
 
             if (produto.getQuantidade() < quantidadeDesejada) {
                 System.out.println("Quantidade insuficiente em estoque.");
-                return;
+                continue;
             }
 
-// Atualiza a quantidade
+            // Atualiza o estoque
             produto.setQuantidade(produto.getQuantidade() - quantidadeDesejada);
-
-// Salva a atualização no banco
             produtoRepo.atualizar(produto);
 
-            System.out.println("Compra realizada com sucesso!");
-
+            System.out.println("Produto adicionado ao carrinho!");
             total += quantidadeDesejada * produto.getPreco();
 
-            scanner.nextLine(); // limpa o buffer antes de ler string
-            System.out.println("Deseja continuar comprando? (sim ou nao) ");
+            scanner.nextLine(); // limpa o buffer
+            System.out.print("Deseja continuar comprando? (sim ou nao): ");
             String op = scanner.nextLine().toLowerCase();
 
-            if (op.equals("sim") || op.equals("s")) {
-                continuarComprando = true;
-            } else if (op.equals("nao") || op.equals("n")) {
-                continuarComprando = false;
-            } else {
-                System.out.println("Erro! Entrada inválida.");
+            if (!op.equals("sim") && !op.equals("s")) {
                 continuarComprando = false;
             }
+        }
 
-            Pix pix = new Pix();
+
 
             System.out.println("1-Pix");
             System.out.println("2-Dinheiro");
@@ -133,6 +129,7 @@ public class SystemUser {
 
             switch (formaDePagamento) {
                 case 1:
+                    Pix pix = new Pix();
                     pix.formaDePagamentoPix(total);
                     System.out.println("\n");
                     System.out.println("---- Escolha a opção de recebimento ----");
@@ -418,7 +415,7 @@ public class SystemUser {
                     System.out.println("Erro! Entrava invalida ");
             }
 
-        }
+
     }
 
 
