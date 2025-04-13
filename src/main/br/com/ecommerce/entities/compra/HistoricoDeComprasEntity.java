@@ -21,6 +21,9 @@ public class HistoricoDeComprasEntity {
     @Column(name = "nomeCliente" ,nullable = false)
     private String nomeCliente;
 
+    @Column(name = "cpfCliente" ,nullable = false)
+    private String cpfCliente;
+
     public String getNomeCliente() {
         return nomeCliente;
     }
@@ -118,4 +121,13 @@ public class HistoricoDeComprasEntity {
     public void setTipoProduto(TipoProduto tipoProduto) {
         this.tipoProduto = tipoProduto;
     }
+
+    public String getCpfCliente() {
+        return cpfCliente;
+    }
+
+    public void setCpfCliente(String cpfCliente) {
+        this.cpfCliente = cpfCliente;
+    }
+
 }
