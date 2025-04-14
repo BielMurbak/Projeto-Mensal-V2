@@ -41,6 +41,8 @@ public class ProdutoEntity {
         this.codigoProduto = codigoProduto;
     }
 
+
+
     public ProdutoEntity() {
         // Construtor vazio para o Hibernate
     }
@@ -92,6 +94,8 @@ public class ProdutoEntity {
     public void setCodigoProduto(int codigoProduto) {
         this.codigoProduto = codigoProduto;
     }
+
+
 }
 
 

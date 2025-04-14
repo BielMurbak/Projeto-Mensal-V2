@@ -8,6 +8,9 @@ import br.com.ecommerce.entities.compra.HistoricoDeComprasEntity;
 import br.com.ecommerce.entities.endereco.EnderecoEntity;
 import br.com.ecommerce.entities.produto.ProdutoEntity;
 import br.com.ecommerce.entities.user.ClienteEntity;
+import br.com.ecommerce.payments.CartaoCredito;
+import br.com.ecommerce.payments.CartaoDebito;
+import br.com.ecommerce.payments.Dinheiro;
 import br.com.ecommerce.payments.Pix;
 import br.com.ecommerce.repository.HistoricoDeComprasRepository;
 import br.com.ecommerce.repository.ProdutoRepository;
@@ -64,6 +67,8 @@ public class SystemUser {
         ProdutoRepository produtoRepo = new ProdutoRepository();
 
         boolean continuarComprando = true;
+        ProdutoEntity produto = null;
+        int quantidadeDesejada = 0;
 
         while (continuarComprando) {
             System.out.println("\n=======================================");
@@ -83,7 +88,7 @@ public class SystemUser {
             System.out.print("\nDigite o código do produto que deseja comprar: ");
             int codigoProduto = scanner.nextInt();
 
-            ProdutoEntity produto = produtoRepo.buscarPorCodigo(codigoProduto);
+            produto = produtoRepo.buscarPorCodigo(codigoProduto);
 
             if (produto == null) {
                 System.out.println("Produto não encontrado.");
@@ -91,7 +96,7 @@ public class SystemUser {
             }
 
             System.out.print("Digite a quantidade que deseja comprar: ");
-            int quantidadeDesejada = scanner.nextInt();
+            quantidadeDesejada = scanner.nextInt();
 
             if (quantidadeDesejada <= 0) {
                 System.out.println("Quantidade inválida.");
@@ -103,9 +108,7 @@ public class SystemUser {
                 continue;
             }
 
-            // Atualiza o estoque
-            produto.setQuantidade(produto.getQuantidade() - quantidadeDesejada);
-            produtoRepo.atualizar(produto);
+
 
             System.out.println("Produto adicionado ao carrinho!");
             total += quantidadeDesejada * produto.getPreco();
@@ -119,285 +122,306 @@ public class SystemUser {
             }
         }
 
-
-
         System.out.println("1-Pix");
         System.out.println("2-Dinheiro");
         System.out.println("3-Cartao de debito");
         System.out.println("4-Cartao de credito");
         System.out.println("Escolha a forma de pagamento:");
-        int formaDePagamento = scanner.nextInt();
+        int opcaoPagamento = scanner.nextInt();
 
-        switch (formaDePagamento) {
-            case 1:
+        TipoCompra formaDePagamento = null;
+
+        switch (opcaoPagamento) {
+            case 1: // Pix
+                System.out.println("Pagamento no pix selecionado.");
                 Pix pix = new Pix();
-                pix.formaDePagamentoPix(total);
-                System.out.println("\n");
-                System.out.println("---- Escolha a opção de recebimento ----");
-                System.out.println("1 - Entrega");
-                System.out.println("2 - Retirada na loja");
-                System.out.print("Digite sua opção: ");
-                int opcaoRecebimento = scanner.nextInt();
-                scanner.nextLine();
-
-                ClienteEntity cliente = null; // declarar fora
-
-                if(opcaoRecebimento == 1) {
-                    System.out.println("Digite o cpf do cliente: ");
-                    String cpf = scanner.nextLine();
-
-                    Session session = null;
-                    try {
-                        session = sessionFactory.openSession();
-                        session.beginTransaction();
-
-                        Query query = session.createQuery("FROM cliente c WHERE c.pessoa.cpf = :cpf");
-                        query.setParameter("cpf", cpf);
-
-                        cliente = (ClienteEntity) query.uniqueResult(); // agora atribui aqui
-
-                        if (cliente != null && cliente.getEnderecoEntity() != null) {
-                            EnderecoEntity endereco = cliente.getEnderecoEntity();
-                            cliente.getPessoa().getNome();
-                            cliente.getPessoa().getTipo();
-
-                            System.out.println("Rua: " + endereco.getRua());
-                            System.out.println("Bairro: " + endereco.getBairro());
-                            System.out.println("Município: " + endereco.getMunicipio());
-                            System.out.println("Estado: " + endereco.getEstado());
-                            System.out.println("CEP: " + endereco.getCep());
-                        } else {
-                            System.out.println("Cliente com CPF " + cpf + " não encontrado ou sem endereço cadastrado.");
-                        }
-
-                        session.getTransaction().commit();
-
-                    } catch (HibernateException e) {
-                        if (session != null) session.getTransaction().rollback();
-                        System.out.println("Erro ao buscar endereço: " + e.getMessage());
-                    } finally {
-                        if (session != null) {
-                            session.close();
-                        }
-                    }
-
-                    System.out.println("Escolha o método de frete:");
-                    System.out.println("1 - Frete Padrão");
-                    System.out.println("2 - Frete Expresso");
-                    int opcaoFrete = scanner.nextInt();
-
-                    if(opcaoFrete==1) {
-                        double totalComFormaDePamento = pix.formaDePagamentoPix(total);
-
-                        try {
-                            HistoricoDeComprasEntity historicoDeCompras = new HistoricoDeComprasEntity();
-                            HistoricoDeComprasRepository historicoDeComprasRepository = new HistoricoDeComprasRepository();
-
-                            // Tipo de frete
-                            historicoDeCompras.setTipoDeFrete(TipoDeFrete.Padrao);
-
-                            // Forma de pagamento
-                                historicoDeCompras.setTipoCompra(TipoCompra.Pix);
-
-
-
-                            historicoDeCompras.setTipo(cliente.getPessoa().getTipo());
-                            historicoDeCompras.setCpfCliente(cpf);
-                            historicoDeCompras.setTipoProduto(TipoProduto.TENIS);
-                            historicoDeCompras.setTipoRecebimento(TipoRecebimento.Entrega);
-                            historicoDeCompras.setNomeCliente(cliente.getPessoa().getNome());
-
-                            historicoDeCompras.setTotal(totalComFormaDePamento);
-
-
-                            // Salva no repositório
-                            historicoDeComprasRepository.salvar(historicoDeCompras);
-
-                            System.out.println("\n===== HISTÓRICO DE COMPRA =====");
-                            System.out.println("Tipo de Frete: " + historicoDeCompras.getTipoDeFrete());
-                            System.out.println("Forma de Pagamento: " + historicoDeCompras.getTipoCompra());
-                            System.out.println("Tipo de Pessoa: " + historicoDeCompras.getTipo());
-                            System.out.println("Tipo de Produto: " + historicoDeCompras.getTipoProduto());
-                            System.out.println("Tipo de Recebimento: " + historicoDeCompras.getTipoRecebimento());
-                            System.out.println("Total da Compra: R$ " + String.format("%.2f", historicoDeCompras.getTotal()));
-                            System.out.println("Cpf:  " + historicoDeCompras.getCpfCliente());
-                            System.out.println("Nome:  " + historicoDeCompras.getNomeCliente());
-
-                            totalComFormaDePamento=0;
-                            System.out.println("Voltando pro menu...");
-                            SystemUser su = new SystemUser();
-                            su.main(null);
-
-                        } catch (Exception e) {
-                            throw new RuntimeException("Erro ao salvar histórico de compras", e);
-
-
-                        }//fim do case 1 frete padrao
-
-                    }else if(opcaoFrete==2){
-                        double totalComFormaDePamento = pix.formaDePagamentoPix(total);
-                        double aux = totalComFormaDePamento;
-                        totalComFormaDePamento = aux * 0.20;
-
-                        HistoricoDeComprasEntity historicoDeCompras = new HistoricoDeComprasEntity();
-                        HistoricoDeComprasRepository historicoDeComprasRepository = new HistoricoDeComprasRepository();
-
-                        try {
-
-                            // Tipo de frete
-                            historicoDeCompras.setTipoDeFrete(TipoDeFrete.Expresso);
-
-                                historicoDeCompras.setTipoCompra(TipoCompra.Dinheiro);
-
-
-                            historicoDeCompras.setTipo(cliente.getPessoa().getTipo());
-                            historicoDeCompras.setCpfCliente(cpf);
-                            historicoDeCompras.setTipoProduto(TipoProduto.TENIS);
-                            historicoDeCompras.setTipoRecebimento(TipoRecebimento.Entrega);
-                            historicoDeCompras.setNomeCliente(cliente.getPessoa().getNome());
-
-                            // Total da compra
-                            historicoDeCompras.setTotal(totalComFormaDePamento); // verifique se essa variável está correta
-
-                            // Salva no repositório
-                            historicoDeComprasRepository.salvar(historicoDeCompras);
-
-
-                        } catch (Exception e) {
-                            throw new RuntimeException("Erro ao salvar histórico de compras", e);
-                        }
-
-                        System.out.println("Tipo de Frete: " + historicoDeCompras.getTipoDeFrete());
-
-                        System.out.println("Forma de Pagamento: " + historicoDeCompras.getTipoCompra());
-                        System.out.println("Tipo de Pessoa: " + historicoDeCompras.getTipo());
-                        System.out.println("Tipo de Produto: " + historicoDeCompras.getTipoProduto());
-                        System.out.println("Tipo de Recebimento: " + historicoDeCompras.getTipoRecebimento());
-                        System.out.println("Total da Compra: R$ " + String.format("%.2f", historicoDeCompras.getTotal()));
-                        System.out.println("Cpf:  " + historicoDeCompras.getCpfCliente());
-                        System.out.println("Nome:  " + historicoDeCompras.getNomeCliente());
-
-                        totalComFormaDePamento = 0;
-                        SystemUser sU = new SystemUser();
-                        SystemUser.main(null);
-
-                    }else {
-                        System.out.println("Erro! Entrada invalida");
-                        break;
-                    }
-
-                }else if (opcaoRecebimento==2){
-
-                    System.out.println("Nosso endereço:");
-                    System.out.println("Rua:Azulão");
-                    System.out.println("Bairro: Morumbi");
-                    System.out.println("Município: Foz do Iguaçu");
-                    System.out.println("Estado: Paraná");
-                    System.out.println("CEP: 85867-000");
-                    System.out.println("\n");
-
-                    System.out.println("Digite o cpf do cliente: ");
-                    String cpf = scanner.nextLine();
-
-
-                    double totalComFormaDePamento = pix.formaDePagamentoPix(total);
-
-                    Session session = null;
-                    try {
-                        session = sessionFactory.openSession();
-                        session.beginTransaction();
-
-                        Query query = session.createQuery("FROM cliente c WHERE c.pessoa.cpf = :cpf");
-                        query.setParameter("cpf", cpf);
-
-                        cliente = (ClienteEntity) query.uniqueResult(); // agora atribui aqui
-
-                        if (cliente != null) {
-                            cliente.getPessoa().getNome();
-                            cliente.getPessoa().getTipo();
-                        } else {
-                            System.out.println("Cliente com CPF " + cpf + " não encontrado ou sem endereço cadastrado.");
-                        }
-
-                        session.getTransaction().commit();
-
-                    } catch (HibernateException e) {
-                        if (session != null) session.getTransaction().rollback();
-                        System.out.println("Erro ao buscar cliente: " + e.getMessage());
-                    } finally {
-                        if (session != null) {
-                            session.close();
-                        }
-                    }
-
-                    try {
-
-                        HistoricoDeComprasEntity historicoDeCompras = new HistoricoDeComprasEntity();
-                        HistoricoDeComprasRepository historicoDeComprasRepository = new HistoricoDeComprasRepository();
-
-                        historicoDeCompras.setTipoDeFrete(TipoDeFrete.SemFrete);
-
-                            historicoDeCompras.setTipoCompra(TipoCompra.Pix);
-
-
-
-
-                        historicoDeCompras.setTipo(cliente.getPessoa().getTipo());
-                        historicoDeCompras.setTipoProduto(TipoProduto.TENIS);
-                        historicoDeCompras.setTipoRecebimento(TipoRecebimento.RetiradaNaLoja);
-                        historicoDeCompras.setNomeCliente(cliente.getPessoa().getNome());
-                        historicoDeCompras.setCpfCliente(cpf);
-
-                        // Total da compra
-                        historicoDeCompras.setTotal(totalComFormaDePamento);
-
-
-                        // Salva no repositório
-                        historicoDeComprasRepository.salvar(historicoDeCompras);
-
-                        System.out.println("\n===== HISTÓRICO DE COMPRA =====");
-                        System.out.println("Tipo de Frete: " + historicoDeCompras.getTipoDeFrete());
-                        System.out.println("Forma de Pagamento: " + historicoDeCompras.getTipoCompra());
-                        System.out.println("Tipo de Pessoa: " + historicoDeCompras.getTipo());
-                        System.out.println("Tipo de Produto: " + historicoDeCompras.getTipoProduto());
-                        System.out.println("Tipo de Recebimento: " + historicoDeCompras.getTipoRecebimento());
-                        System.out.println("Total da Compra: R$ " + String.format("%.2f", historicoDeCompras.getTotal()));
-                        System.out.println("Cpf:  " + historicoDeCompras.getCpfCliente());
-                        System.out.println("Nome:  " + historicoDeCompras.getNomeCliente());
-
-                        totalComFormaDePamento = 0;
-                        System.out.println("Voltando pro menu...");
-                        SystemUser su = new SystemUser();
-                        su.main(null);
-
-                    } catch (Exception e) {
-                        throw new RuntimeException("Erro ao salvar histórico de compras", e);
-                    }
-
-                }else{
-                    System.out.println("Erro! Entrada invalida");
-                }
+                total = pix.formaDePagamentoPix(total); // Atualiza o desconto do pix
+                formaDePagamento = TipoCompra.Pix;
+                ApiCEP(total, formaDePagamento, produto, quantidadeDesejada, produtoRepo);
                 break;
 
-            case 2:
-
+            case 2: // Dinheiro
+                System.out.println("Pagamento em dinheiro selecionado.");
+                Dinheiro dinheiro = new Dinheiro();
+                total = dinheiro.formaDePagamentoDinheiro(total);
+                formaDePagamento = TipoCompra.Dinheiro;
+                ApiCEP(total, formaDePagamento, produto, quantidadeDesejada, produtoRepo);
                 break;
 
-            case 3:
+            case 3: // Cartão de débito
+                System.out.println("Pagamento via cartão de débito selecionado.");
 
+                formaDePagamento = TipoCompra.CartaoDebito;
+                CartaoDebito debito = new CartaoDebito();
+                total = debito.formaDePagamentoDebito(total);
+                ApiCEP(total, formaDePagamento, produto, quantidadeDesejada, produtoRepo);
                 break;
 
-            case 4:
-
+            case 4: // Cartão de crédito
+                System.out.println("Pagamento via cartão de crédito selecionado.");
+                CartaoCredito credito = new CartaoCredito();
+                total = credito.formaDePagamentoCredito(total);
+                formaDePagamento = TipoCompra.CartaoCredito;
+                ApiCEP(total, formaDePagamento, produto, quantidadeDesejada, produtoRepo);
                 break;
 
             default:
                 System.out.println("Erro! Entrava invalida ");
         }
 
-
     }
 
+    private static void ApiCEP(double total, TipoCompra tipoCompra, ProdutoEntity produto, int quantidadeDesejada, ProdutoRepository produtoRepo) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n");
+        System.out.println("---- Escolha a opção de recebimento ----");
+        System.out.println("1 - Entrega");
+        System.out.println("2 - Retirada na loja");
+        System.out.print("Digite sua opção: ");
+        int opcaoRecebimento = scanner.nextInt();
+        scanner.nextLine();
+
+        ClienteEntity cliente = null; // declarar fora
+
+        if(opcaoRecebimento == 1) {
+            System.out.println("Digite o cpf do cliente: ");
+            String cpf = scanner.nextLine();
+
+            Session session = null;
+            try {
+                session = sessionFactory.openSession();
+                session.beginTransaction();
+
+                Query query = session.createQuery("FROM cliente c WHERE c.pessoa.cpf = :cpf");
+                query.setParameter("cpf", cpf);
+
+                cliente = (ClienteEntity) query.uniqueResult(); // agora atribui aqui
+
+                if (cliente != null && cliente.getEnderecoEntity() != null) {
+                    EnderecoEntity endereco = cliente.getEnderecoEntity();
+                    cliente.getPessoa().getNome();
+                    cliente.getPessoa().getTipo();
+
+                    System.out.println("Rua: " + endereco.getRua());
+                    System.out.println("Bairro: " + endereco.getBairro());
+                    System.out.println("Município: " + endereco.getMunicipio());
+                    System.out.println("Estado: " + endereco.getEstado());
+                    System.out.println("CEP: " + endereco.getCep());
+                } else {
+                    System.out.println("Cliente com CPF " + cpf + " não encontrado ou sem endereço cadastrado.");
+                }
+
+                session.getTransaction().commit();
+
+            } catch (HibernateException e) {
+                if (session != null) session.getTransaction().rollback();
+                System.out.println("Erro ao buscar endereço: " + e.getMessage());
+            } finally {
+                if (session != null) {
+                    session.close();
+                }
+            }
+
+            System.out.println("Escolha o método de frete:");
+            System.out.println("1 - Frete Padrão");
+            System.out.println("2 - Frete Expresso");
+            int opcaoFrete = scanner.nextInt();
+
+            if(opcaoFrete==1) {
+
+
+                try {
+                    HistoricoDeComprasEntity historicoDeCompras = new HistoricoDeComprasEntity();
+                    HistoricoDeComprasRepository historicoDeComprasRepository = new HistoricoDeComprasRepository();
+
+                    // Tipo de frete
+                    historicoDeCompras.setTipoDeFrete(TipoDeFrete.Padrao);
+
+                    // Forma de pagamento
+                    historicoDeCompras.setTipoCompra(tipoCompra);
+
+
+
+                    historicoDeCompras.setTipo(cliente.getPessoa().getTipo());
+                    historicoDeCompras.setCpfCliente(cpf);
+                    historicoDeCompras.setTipoProduto(produto.getTipo());
+                    historicoDeCompras.setTipoRecebimento(TipoRecebimento.Entrega);
+                    historicoDeCompras.setNomeCliente(cliente.getPessoa().getNome());
+
+                    historicoDeCompras.setTotal(total);
+
+
+                    // Salva no repositório
+                    historicoDeComprasRepository.salvar(historicoDeCompras);
+
+                    System.out.println("\n===== HISTÓRICO DE COMPRA =====");
+                    System.out.println("Tipo de Frete: " + historicoDeCompras.getTipoDeFrete());
+                    System.out.println("Forma de Pagamento: " + historicoDeCompras.getTipoCompra());
+                    System.out.println("Tipo de Pessoa: " + historicoDeCompras.getTipo());
+                    System.out.println("Tipo de Produto: " + historicoDeCompras.getTipoProduto());
+                    System.out.println("Tipo de Recebimento: " + historicoDeCompras.getTipoRecebimento());
+                    System.out.println("Total da Compra: R$ " + String.format("%.2f", historicoDeCompras.getTotal()));
+                    System.out.println("Cpf:  " + historicoDeCompras.getCpfCliente());
+                    System.out.println("Nome:  " + historicoDeCompras.getNomeCliente());
+
+                    total=0;
+                    System.out.println("Voltando pro menu...");
+                    SystemUser su = new SystemUser();
+                    su.main(null);
+
+                } catch (Exception e) {
+                    throw new RuntimeException("Erro ao salvar histórico de compras", e);
+
+
+                }//fim do case 1 frete padrao
+
+            }else if(opcaoFrete==2){
+
+                total += total * 0.02;
+
+                HistoricoDeComprasEntity historicoDeCompras = new HistoricoDeComprasEntity();
+                HistoricoDeComprasRepository historicoDeComprasRepository = new HistoricoDeComprasRepository();
+
+                try {
+
+                    // Tipo de frete
+                    historicoDeCompras.setTipoDeFrete(TipoDeFrete.Expresso);
+
+                    historicoDeCompras.setTipoCompra(tipoCompra);
+
+
+                    historicoDeCompras.setTipo(cliente.getPessoa().getTipo());
+                    historicoDeCompras.setCpfCliente(cpf);
+                    historicoDeCompras.setTipoProduto(produto.getTipo());
+                    historicoDeCompras.setTipoRecebimento(TipoRecebimento.Entrega);
+                    historicoDeCompras.setNomeCliente(cliente.getPessoa().getNome());
+
+                    // Total da compra
+                    historicoDeCompras.setTotal(total); // verifique se essa variável está correta
+
+                    // Salva no repositório
+                    historicoDeComprasRepository.salvar(historicoDeCompras);
+
+
+                } catch (Exception e) {
+                    throw new RuntimeException("Erro ao salvar histórico de compras", e);
+                }
+
+                produto.setQuantidade(produto.getQuantidade() - quantidadeDesejada);
+                produtoRepo.atualizar(produto);
+
+                System.out.println("Tipo de Frete: " + historicoDeCompras.getTipoDeFrete());
+
+                System.out.println("Forma de Pagamento: " + historicoDeCompras.getTipoCompra());
+                System.out.println("Tipo de Pessoa: " + historicoDeCompras.getTipo());
+                System.out.println("Tipo de Produto: " + historicoDeCompras.getTipoProduto());
+                System.out.println("Tipo de Recebimento: " + historicoDeCompras.getTipoRecebimento());
+                System.out.println("Total da Compra: R$ " + String.format("%.2f", historicoDeCompras.getTotal()));
+                System.out.println("Cpf:  " + historicoDeCompras.getCpfCliente());
+                System.out.println("Nome:  " + historicoDeCompras.getNomeCliente());
+
+                total = 0;
+                SystemUser sU = new SystemUser();
+                SystemUser.main(null);
+
+            }else {
+                System.out.println("Erro! Entrada invalida");
+            }
+
+        }else if (opcaoRecebimento==2){
+
+            System.out.println("Nosso endereço:");
+            System.out.println("Rua:Azulão");
+            System.out.println("Bairro: Morumbi");
+            System.out.println("Município: Foz do Iguaçu");
+            System.out.println("Estado: Paraná");
+            System.out.println("CEP: 85867-000");
+            System.out.println("\n");
+
+            System.out.println("Digite o cpf do cliente: ");
+            String cpf = scanner.nextLine();
+
+
+
+
+            Session session = null;
+            try {
+                session = sessionFactory.openSession();
+                session.beginTransaction();
+
+                Query query = session.createQuery("FROM cliente c WHERE c.pessoa.cpf = :cpf");
+                query.setParameter("cpf", cpf);
+
+                cliente = (ClienteEntity) query.uniqueResult(); // agora atribui aqui
+
+                if (cliente != null) {
+                    cliente.getPessoa().getNome();
+                    cliente.getPessoa().getTipo();
+                } else {
+                    System.out.println("Cliente com CPF " + cpf + " não encontrado ou sem endereço cadastrado.");
+                }
+
+                session.getTransaction().commit();
+
+            } catch (HibernateException e) {
+                if (session != null) session.getTransaction().rollback();
+                System.out.println("Erro ao buscar cliente: " + e.getMessage());
+            } finally {
+                if (session != null) {
+                    session.close();
+                }
+            }
+
+            try {
+
+                HistoricoDeComprasEntity historicoDeCompras = new HistoricoDeComprasEntity();
+                HistoricoDeComprasRepository historicoDeComprasRepository = new HistoricoDeComprasRepository();
+
+                historicoDeCompras.setTipoDeFrete(TipoDeFrete.SemFrete);
+
+                historicoDeCompras.setTipoCompra(tipoCompra);
+
+
+
+
+                historicoDeCompras.setTipo(cliente.getPessoa().getTipo());
+                historicoDeCompras.setTipoProduto(produto.getTipo());
+                historicoDeCompras.setTipoRecebimento(TipoRecebimento.RetiradaNaLoja);
+                historicoDeCompras.setNomeCliente(cliente.getPessoa().getNome());
+                historicoDeCompras.setCpfCliente(cpf);
+
+                // Total da compra
+                historicoDeCompras.setTotal(total);
+
+                // Salva no repositório
+                produto.setQuantidade(produto.getQuantidade() - quantidadeDesejada);
+                produtoRepo.atualizar(produto);
+                historicoDeComprasRepository.salvar(historicoDeCompras);
+
+                System.out.println("\n===== HISTÓRICO DE COMPRA =====");
+                System.out.println("Tipo de Frete: " + historicoDeCompras.getTipoDeFrete());
+                System.out.println("Forma de Pagamento: " + historicoDeCompras.getTipoCompra());
+                System.out.println("Tipo de Pessoa: " + historicoDeCompras.getTipo());
+                System.out.println("Tipo de Produto: " + historicoDeCompras.getTipoProduto());
+                System.out.println("Tipo de Recebimento: " + historicoDeCompras.getTipoRecebimento());
+                System.out.println("Total da Compra: R$ " + String.format("%.2f", historicoDeCompras.getTotal()));
+                System.out.println("Cpf:  " + historicoDeCompras.getCpfCliente());
+                System.out.println("Nome:  " + historicoDeCompras.getNomeCliente());
+
+                total = 0;
+                System.out.println("Voltando pro menu...");
+                SystemUser su = new SystemUser();
+                su.main(null);
+
+            } catch (Exception e) {
+                throw new RuntimeException("Erro ao salvar histórico de compras", e);
+            }
+
+        }else{
+            System.out.println("Erro! Entrada invalida");
+        }
+
+    }
 
 
     public static void suporteAoCliente() {

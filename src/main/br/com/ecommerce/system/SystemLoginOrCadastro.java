@@ -14,6 +14,9 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class SystemLoginOrCadastro {
+
+    public static ClienteEntity clienteLogado;
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -32,6 +35,7 @@ public class SystemLoginOrCadastro {
             System.out.println("Escolha uma opção:");
 
             op = scanner.nextInt();
+            scanner.nextLine();
 
             switch (op) {
                 case 1:
@@ -90,7 +94,8 @@ public class SystemLoginOrCadastro {
                     }else if (cliente==null){
                         System.out.println("Senha do Usuário não encontrado. Tente novamente.\n");
                         break;
-                    }else{
+                    }else {
+                        clienteLogado = cliente;
                         System.out.println("✅ Login realizado com sucesso como Cliente.");
                         SystemUser su = new SystemUser();
                         su.main(null);
