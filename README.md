@@ -72,16 +72,6 @@ Em Project SDK, selecione o JDK 17 que você instalou (caso não esteja na lista
 
 Em Project Language Level, selecione o nível 17 - Sealed types, pattern matching.
 
-Verifique o Maven:
-
-Certifique-se de que o Maven também esteja configurado corretamente para usar o Java 17.
-
-No IntelliJ IDEA, vá até File > Settings > Build, Execution, Deployment > Build Tools > Maven.
-
-Na seção JDK for Importer, selecione o JDK 17.
-
-
-
 Baixe e instale o Maven:
 
 Faça o download do arquivo:
@@ -126,7 +116,9 @@ No IntelliJ, vá para:
 
 src/main/java/br/com/ecommerce/system
 
-Abra o arquivo SystemUser.java e clique em Run para executar o sistema.
+abra pasta src, abra pasta main e depois pasta br.com.ecommerce
+
+Abra o arquivo System e clique em Run na class Main para executar o sistema.
 
 Em seguida, execute o SystemLoginOrCadastro.java para acessar a área de login e visualizar os produtos disponíveis.
 
@@ -134,11 +126,12 @@ Em seguida, execute o SystemLoginOrCadastro.java para acessar a área de login e
 
 🛠 DER (Diagrama Entidade-Relacionamento):
 
-![image](https://github.com/user-attachments/assets/a5c43f80-35f0-4199-a5c6-2752474588e8)
+![image](https://github.com/user-attachments/assets/c9ec6f22-b3d7-49d7-87ee-3a2fe4fc73bd)
 
-![image](https://github.com/user-attachments/assets/2c2f26b6-87d3-454c-9f01-a83e9fd36ea8)
+![image](https://github.com/user-attachments/assets/86467416-7c77-4f0c-9dac-bc8b113d7785)
 
-https://lucid.app/lucidchart/1ee97289-0c4c-4689-ba6f-80c036a646ed/edit?viewport_loc=832%2C-216%2C1609%2C816%2C0_0&invitationId=inv_3cbe8fad-3549-486c-9fe4-087ba063ade8
+
+https://lucid.app/lucidchart/1ee97289-0c4c-4689-ba6f-80c036a646ed/edit?viewport_loc=665%2C-610%2C1447%2C734%2C0_0&invitationId=inv_3cbe8fad-3549-486c-9fe4-087ba063ade8
 
 .
 
