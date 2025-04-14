@@ -28,10 +28,13 @@ public class SystemLoginOrCadastro {
 
         do {
             System.out.println("\n");
-            System.out.println("---Sistema e-commerce---");
+            System.out.println("=================================");
+            System.out.println("===== E-Commerce GBs Street =====");
+            System.out.println("=================================\n");
             System.out.println("1 - Fazer Login");
             System.out.println("2 - Cadastrar");
             System.out.println("3 - Encerrar programa");
+            System.out.println("----------------------");
             System.out.println("Escolha uma opção:");
 
             op = scanner.nextInt();

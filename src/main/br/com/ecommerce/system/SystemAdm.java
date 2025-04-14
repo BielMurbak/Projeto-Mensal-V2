@@ -28,8 +28,11 @@ public class SystemAdm {
         // Menu principal
 
         do {
-            System.out.println("\n");
-            System.out.println("\n=== Sistema E-commerce ===");
+
+            System.out.println("=================================");
+            System.out.println("===== E-Commerce GBs Street =====");
+            System.out.println("===== Sistema Administrador =====");
+            System.out.println("=================================\n");
             System.out.println("---------------------");
             System.out.println("1 - Cadastrar Produto");
             System.out.println("2 - Listar Produtos ");
@@ -45,6 +48,7 @@ public class SystemAdm {
             System.out.println("--------------------");
             System.out.println("10 - Acessar Sistema de Usuário");
             System.out.println("11 - Encerrar Programa");
+            System.out.println("---------------------");
             System.out.print("Escolha uma opção: ");
             op = scanner.nextInt();
 
