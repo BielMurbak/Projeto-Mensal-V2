@@ -32,8 +32,7 @@ public class HistoricoDeComprasEntity {
         this.nomeCliente = nomeCliente;
     }
 
-    @Column(name = "quantidadeComprada", nullable = false)
-    private int quantidade;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipoUser", nullable = false)
@@ -80,13 +79,7 @@ public class HistoricoDeComprasEntity {
         this.total = total;
     }
 
-    public int getQuantidade() {
-        return quantidade;
-    }
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
 
 
 

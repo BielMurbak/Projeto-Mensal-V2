@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class EnderecoEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "rua",nullable = false)

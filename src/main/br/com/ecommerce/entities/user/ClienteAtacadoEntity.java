@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class ClienteAtacadoEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "desconto",nullable = false)
