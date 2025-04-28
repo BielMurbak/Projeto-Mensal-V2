@@ -37,13 +37,13 @@ public class PessoaRepository {
     public PessoaEntity buscarPorNome(String nome) {
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
-        PessoaEntity  pessoa = null;
+        PessoaEntity pessoa = null;
 
         try {
             transaction = session.beginTransaction();
 
-            pessoa= session
-                    .createQuery("FROM PessoaEntity WHERE nome = :nome", PessoaEntity .class)
+            pessoa = session
+                    .createQuery("FROM PessoaEntity WHERE nome = :nome", PessoaEntity.class)
                     .setParameter("nome", nome)
                     .uniqueResult();
 
@@ -57,6 +57,17 @@ public class PessoaRepository {
 
         return pessoa;
     }
+
+    public List<PessoaEntity> buscarPorParcialNome(String nome) {
+            try (Session session = sessionFactory.openSession()) {
+                return session
+                        .createQuery("FROM PessoaEntity WHERE nome LIKE :nome", PessoaEntity.class)
+                        .setParameter("nome", "%" + nome + "%")
+                        .list(); // <-- retorna uma lista
+            } catch (Exception e) {
+                throw new RuntimeException("Erro ao buscar pessoa por nome parcial", e);
+            }
+        }
 
     public PessoaEntity buscarPorCpf(String cpf) {
         Session session = sessionFactory.openSession();

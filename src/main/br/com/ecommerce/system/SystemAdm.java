@@ -47,7 +47,8 @@ public class SystemAdm {
             System.out.println("9 - Remover Cliente");
             System.out.println("--------------------");
             System.out.println("10 - Acessar Sistema de Usuário");
-            System.out.println("11 - Encerrar Programa");
+            System.out.println("11 - Buscar por primeiro nome");
+            System.out.println("12-  Encerrar Programa");
             System.out.println("---------------------");
             System.out.print("Escolha uma opção: ");
             op = scanner.nextInt();
@@ -85,6 +86,9 @@ public class SystemAdm {
                     SystemUser.main(null);
                     break;
                 case 11:
+                   buscarPorPrimeiroNome(scanner);
+                   break;
+                case 12:
                     System.out.println("✅ Programa foi encerrado com sucesso.");
                     exit(0);
                     break;
@@ -93,7 +97,7 @@ public class SystemAdm {
 
             }//fecha o switch
 
-        } while (op != 11);//fecha o while
+        } while (op != 12);//fecha o while
 
     }//fecha a public static void SystemAdm
 
@@ -432,6 +436,40 @@ public class SystemAdm {
 
     }//fim do case 9
 
+    //case 11
+    public static void buscarPorPrimeiroNome(Scanner scanner){
+
+        scanner.nextLine();
+
+        System.out.println("\n--Buscar pessoa por nome--");
+        System.out.printf("Digite o nome:");
+        String nomeParcial = scanner.nextLine();
+
+            try {
+                PessoaRepository pessoaRepository = new PessoaRepository();
+
+                List<PessoaEntity> pessoas = pessoaRepository.buscarPorParcialNome(nomeParcial);
+
+                if (!pessoas.isEmpty()) {
+                    for (PessoaEntity pessoa : pessoas) {
+                        System.out.println("----------------------");
+                        System.out.println("Nome: " + pessoa.getNome());
+                        System.out.println("CPF: " + pessoa.getCpf());
+                        System.out.println("Tipo: " + pessoa.getTipo());
+                        System.out.println("Data de Nascimento: " + pessoa.getDataDeNascimento());
+                    }
+                } else {
+                    System.out.println("⚠️ Nenhuma pessoa encontrada com esse nome.");
+                }
+
+            } catch (Exception e) {
+                throw new RuntimeException("Erro ao Buscar: " + e.getMessage(), e);
+            }
+
+    }//fim do case 11
+
 
 
 }//fecha o SystemAdm
+
+

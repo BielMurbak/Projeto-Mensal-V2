@@ -1,3 +1,4 @@
+
 package br.com.ecommerce.system;
 
 
@@ -39,7 +40,7 @@ public class Main {
             AdministradorEntity adm = new AdministradorEntity();
             PessoaEntity pessoaAdm = new PessoaEntity();
 
-           // Pessoa do cliente
+            // Pessoa do cliente
             pessoaCliente.setTipo(TipoPessoa.CLIENTE_VAREJO);
             pessoaCliente.setNome("Adryan");
             pessoaCliente.setCpf("279.641.580-40");
