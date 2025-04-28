@@ -36,13 +36,16 @@ public class Main {
             ClienteEntity cliente = new ClienteEntity();
             PessoaEntity pessoaCliente = new PessoaEntity();
             EnderecoEntity endereco = new EnderecoEntity();
+            ClienteEntity cliente2 = new ClienteEntity();
+            PessoaEntity pessoaCliente2 = new PessoaEntity();
+            EnderecoEntity endereco2 = new EnderecoEntity();
 
             AdministradorEntity adm = new AdministradorEntity();
             PessoaEntity pessoaAdm = new PessoaEntity();
 
             // Pessoa do cliente
             pessoaCliente.setTipo(TipoPessoa.CLIENTE_VAREJO);
-            pessoaCliente.setNome("Adryan");
+            pessoaCliente.setNome("Adryan Jacinto");
             pessoaCliente.setCpf("279.641.580-40");
             pessoaCliente.setDataDeNascimento(LocalDate.of(2006, 7, 25));
 
@@ -57,6 +60,23 @@ public class Main {
             cliente.setPessoa(pessoaCliente);
             cliente.setEnderecoEntity(endereco);
 
+            //pessoa 2
+            pessoaCliente2.setTipo(TipoPessoa.CLIENTE_ATACADO);
+            pessoaCliente2.setNome("Adryan Silva");
+            pessoaCliente2.setCpf("022.141.180-30");
+            pessoaCliente2.setDataDeNascimento(LocalDate.of(2004, 2, 10));
+
+            endereco2.setRua("Alexandria");
+            endereco2.setBairro("Jacinto");
+            endereco2.setMunicipio("Azul Claro");
+            endereco2.setCep("45222-101");
+            endereco2.setEstado("SC");
+
+            cliente2.setSenha("2507@");
+            cliente2.setPessoa(pessoaCliente2);
+            cliente2.setEnderecoEntity(endereco2);
+            //fim do segunda pessoa
+
             // Pessoa do administrador
             pessoaAdm.setTipo(TipoPessoa.ADMINISTRADOR);
             pessoaAdm.setNome("Biel");
@@ -68,6 +88,7 @@ public class Main {
 
             session.save(cliente);
             session.save(adm);
+            session.save(cliente2);
 
             //Criar Produto
 

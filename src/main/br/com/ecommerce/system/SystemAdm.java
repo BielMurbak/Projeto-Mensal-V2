@@ -35,20 +35,21 @@ public class SystemAdm {
             System.out.println("=================================\n");
             System.out.println("---------------------");
             System.out.println("1 - Cadastrar Produto");
-            System.out.println("2 - Listar Produtos ");
-            System.out.println("3 - Remover Produto");
+            System.out.println("2 - Listar Produtos e quantidade de produtos");
+            System.out.println("3 - Buscar produtos por valores minimo e maximo");
+            System.out.println("4 - Remover Produto");
             System.out.println("--------------------");
-            System.out.println("4 - Adicionar Administrador");
-            System.out.println("5 - Listar Administradores");
-            System.out.println("6 - Remover Administrador");
+            System.out.println("5 - Adicionar Administrador");
+            System.out.println("6 - Listar Administradores");
+            System.out.println("7 - Remover Administrador");
             System.out.println("--------------------");
-            System.out.println("7 - Cadastrar Cliente");
-            System.out.println("8 - Listar Clientes");
-            System.out.println("9 - Remover Cliente");
+            System.out.println("8 - Cadastrar Cliente");
+            System.out.println("9 - Listar Clientes");
+            System.out.println("10 - Remover Cliente");
             System.out.println("--------------------");
-            System.out.println("10 - Acessar Sistema de Usuário");
-            System.out.println("11 - Buscar por primeiro nome");
-            System.out.println("12-  Encerrar Programa");
+            System.out.println("11 - Acessar Sistema de Usuário");
+            System.out.println("12 - Buscar pessoas por primeiro nome ");
+            System.out.println("13-  Encerrar Programa");
             System.out.println("---------------------");
             System.out.print("Escolha uma opção: ");
             op = scanner.nextInt();
@@ -61,34 +62,36 @@ public class SystemAdm {
                     listarProdutos();
                     break;
                 case 3:
-                    removerProduto(scanner);
+                    buscarProdutoPorPreco(scanner);
                     break;
                 case 4:
-                    adicionarAdministrador(scanner);
+                    removerProduto(scanner);
                     break;
                 case 5:
-                    listarAdministradores();
+                    adicionarAdministrador(scanner);
                     break;
                 case 6:
-                    removerAdministrador(scanner);
+                    listarAdministradores();
                     break;
                 case 7:
-                    cadastrarCliente(scanner);
+                    removerAdministrador(scanner);
                     break;
                 case 8:
-                    listarClientes();
+                    cadastrarCliente(scanner);
                     break;
                 case 9:
-                    removerCliente(scanner);
+                    listarClientes();
                     break;
                 case 10:
-                    System.out.println("Acessando sistema usuario...");
-                    SystemUser.main(null);
+                    removerCliente(scanner);
                     break;
                 case 11:
-                   buscarPorPrimeiroNome(scanner);
+                    System.out.println("Acessando sistema usuario...");
+                    SystemUser.main(null);
                    break;
                 case 12:
+                    buscarPorPrimeiroNome(scanner);
+                case 13:
                     System.out.println("✅ Programa foi encerrado com sucesso.");
                     exit(0);
                     break;
@@ -161,6 +164,7 @@ public class SystemAdm {
 
         ProdutoRepository produtoRepository = new  ProdutoRepository();
         List<ProdutoEntity> produtos = produtoRepository.listarTodos();
+        long contadorProdutos = produtoRepository.contarProdutosCadastrados();
 
         if(produtos!=null){
             System.out.println("Produtos registrados no banco");
@@ -181,14 +185,36 @@ public class SystemAdm {
                 System.out.println("\n");
 
             }
+            System.out.println("Total de produtos cadastrados: " + contadorProdutos);
         }else{
             System.out.println("Erro! nao foi encontrado nenhum adm no banco");
         }
+
     }//fim do case 2
 
 
-
     //case 3
+public static void buscarProdutoPorPreco(Scanner scanner){
+        scanner.nextLine();
+        System.out.printf("Valor minimo:");
+        double valor1 = scanner.nextDouble();
+      System.out.printf("Valor maximo:");
+      double valor2 = scanner.nextDouble();
+
+    try{
+        ProdutoRepository produto = new  ProdutoRepository();
+        produto.buscarPorValor(valor1,valor2);
+
+
+    } catch (Exception e) {
+        throw new RuntimeException("Erro ao buscar por valor minimo e maximo: " + e.getMessage(), e);
+    }
+
+
+}//fim do case 3
+
+
+//case 4
     public static void removerProduto(Scanner scanner) {
         scanner.nextLine();
         System.out.println("\n--Remover Produto ---");
@@ -204,11 +230,11 @@ public class SystemAdm {
         }
 
 
-    }//fim do case 3
+    }//fim do case 4
 
 
 
-    //case 4
+    //case 5
     public static void adicionarAdministrador(Scanner scanner) {
         scanner.nextLine();
         System.out.println("\n--- Adicionar Administrador---");
@@ -247,11 +273,11 @@ public class SystemAdm {
             throw new RuntimeException("Erro ao adicionar administrador: " + e.getMessage(), e);
         }
 
-    }//fim do case 4-------------------------------------------------------------------
+    }//fim do case 5-------------------------------------------------------------------
 
 
 
-    //case 5-------------------------------------------------------------------
+    //case 6-------------------------------------------------------------------
     public static void listarAdministradores() {
         AdministradorRepository administradorRepository = new AdministradorRepository();
         List<AdministradorEntity> admins = administradorRepository.buscarAdm();
@@ -276,11 +302,11 @@ public class SystemAdm {
             System.out.println("Erro! nao foi encontrado nenhum adm no banco");
         }
 
-    }//fim do case 5-------------------------------------------------------------------
+    }//fim do case 6-------------------------------------------------------------------
 
 
 
-    //case 6-------------------------------------------------------------------
+    //case 7-------------------------------------------------------------------
     public static void removerAdministrador(Scanner scanner) {
         scanner.nextLine();
         System.out.println("\n--Remover Administrador---");
@@ -298,11 +324,11 @@ public class SystemAdm {
             throw new RuntimeException("Erro ao adicionar administrador: " + e.getMessage(), e);
         }
 
-    }//fim do case 6
+    }//fim do case 7
 
 
 
-   //case 7
+   //case 8
     public static void cadastrarCliente(Scanner scanner) {
         System.out.print("1 - Tipo Atacado\n");
         System.out.print("2 - Tipo Varejo\n");
@@ -381,10 +407,10 @@ public class SystemAdm {
                 System.out.println("Erro ao cadastrar cliente: " + e.getMessage());
             }
 
-}//fim do case 7
+}//fim do case 8
 
 
-    //case 8
+    //case 9
     public static void listarClientes() {
 
         ClienteRepository clienteRepository = new ClienteRepository();
@@ -412,11 +438,11 @@ public class SystemAdm {
 
     }
 
-//fim do case 8
+//fim do case 9
 
 
 
-    //case 9
+    //case 10
     public static void removerCliente(Scanner scanner) {
 
         scanner.nextLine();
@@ -434,9 +460,9 @@ public class SystemAdm {
             throw new RuntimeException("Erro ao remover Cliente: " + e.getMessage(), e);
         }
 
-    }//fim do case 9
+    }//fim do case 10
 
-    //case 11
+    //case 12
     public static void buscarPorPrimeiroNome(Scanner scanner){
 
         scanner.nextLine();
@@ -466,7 +492,7 @@ public class SystemAdm {
                 throw new RuntimeException("Erro ao Buscar: " + e.getMessage(), e);
             }
 
-    }//fim do case 11
+    }//fim do case 12
 
 
 

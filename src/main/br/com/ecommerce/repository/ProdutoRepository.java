@@ -28,6 +28,51 @@ public class ProdutoRepository {
         return produtos;
     }
 
+    public long contarProdutosCadastrados(){
+        Session session = sessionFactory.openSession();
+
+        Long totalProdutos = session.createQuery(
+                "SELECT COUNT(p) FROM br.com.ecommerce.entities.produto.ProdutoEntity p",
+                Long.class
+        ).getSingleResult();
+
+        session.close();
+        return totalProdutos;
+    }
+
+    public void buscarPorValor(double valor1, double valor2) {
+        Session session = sessionFactory.openSession();
+
+        List<ProdutoEntity> produtos = session.createQuery(
+                        "FROM br.com.ecommerce.entities.produto.ProdutoEntity p WHERE p.preco BETWEEN :precoMin AND :precoMax",
+                        ProdutoEntity.class
+                )
+                .setParameter("precoMin", valor1)
+                .setParameter("precoMax", valor2)
+                .list();
+
+        if (produtos != null && !produtos.isEmpty()) {
+            for (ProdutoEntity produto : produtos) {
+                System.out.println("------------------------");
+                System.out.println("Codigo: " + produto.getCodigoProduto());
+                System.out.println("------------------------");
+                System.out.println("Nome: " + produto.getNome());
+                System.out.println("------------------------");
+                System.out.println("Quantidade: " + produto.getQuantidade());
+                System.out.println("------------------------");
+                System.out.println("Tipo: " + produto.getTipo());
+                System.out.println("------------------------");
+                System.out.println("Preço: " + produto.getPreco());
+                System.out.println("------------------------\n\n\n");
+            }
+        } else {
+            System.out.println("Nenhum produto encontrado para esse intervalo de valores.");
+        }
+
+        session.close();
+    }
+
+
     public ProdutoEntity buscarPorCodigo(int codigoProduto) {
         Session session = sessionFactory.openSession();
         ProdutoEntity produto = session
