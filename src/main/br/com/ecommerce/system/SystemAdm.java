@@ -1,5 +1,6 @@
 package br.com.ecommerce.system;
 
+// Imports
 import br.com.ecommerce.entities.endereco.EnderecoEntity;
 import br.com.ecommerce.entities.produto.ProdutoEntity;
 import br.com.ecommerce.entities.user.AdministradorEntity;
@@ -28,7 +29,7 @@ public class SystemAdm {
         // Menu principal
 
         do {
-
+            // Menu principal com opções administrativas
             System.out.println("=================================");
             System.out.println("===== E-Commerce GBs Street =====");
             System.out.println("===== Sistema Administrador =====");
@@ -54,6 +55,7 @@ public class SystemAdm {
             System.out.print("Escolha uma opção: ");
             op = scanner.nextInt();
 
+            // Switch para selecionar a ação conforme opção escolhida
             switch (op) {
                 case 1:
                     cadastrarProduto(scanner);
@@ -106,14 +108,18 @@ public class SystemAdm {
 
 
 
-   //case 1
+    // case 1
     public static void cadastrarProduto(Scanner scanner) {
+        // Limpa a quebra de linha pendente no Scanner
         scanner.nextLine();
+
         System.out.println("\n--- Adicionar Produto ---");
+
+        // Solicita o nome do produto
         System.out.print("Nome do Produto: ");
         String nomeProduto = scanner.nextLine();
 
-
+        // Exibe as opções de tipo de produto
         System.out.println("1-Tenis");
         System.out.println("2-Camiseta");
         System.out.println("3-Calça ");
@@ -121,53 +127,70 @@ public class SystemAdm {
         System.out.print("Escolha o tipo:");
         int tipoProduto = scanner.nextInt();
 
+        // Limpa a quebra de linha pendente
         scanner.nextLine();
 
+        // Solicita quantidade
         System.out.print("Quantidade: ");
         int quantidade = Integer.parseInt(scanner.nextLine());
 
+        // Solicita preço
         System.out.print("Preço: ");
         double preco = Double.parseDouble(scanner.nextLine());
 
+        // Solicita código do produto
         System.out.print("Código do Produto: ");
         int codigoProduto = Integer.parseInt(scanner.nextLine());
 
+        // Cria objeto ProdutoEntity e seta os dados coletados
         ProdutoEntity produto = new ProdutoEntity();
         produto.setNome(nomeProduto);
         produto.setQuantidade(quantidade);
 
-        if(tipoProduto==1){
+        // Define o tipo do produto baseado na escolha
+        if (tipoProduto == 1) {
             produto.setTipo(TipoProduto.TENIS);
-        }else if (tipoProduto==2){
+        } else if (tipoProduto == 2) {
             produto.setTipo(TipoProduto.CAMISA);
-        }else if(tipoProduto==3)
+        } else if (tipoProduto == 3) {
             produto.setTipo(TipoProduto.CALCA);
-        else{
+        } else {
             produto.setTipo(TipoProduto.BONE);
         }
 
+        // Define preço e código
         produto.setPreco(preco);
         produto.setCodigoProduto(codigoProduto);
 
+        // Cria repositório e salva produto
         ProdutoRepository produtoRepository = new ProdutoRepository();
         produtoRepository.salvar(produto);
 
+        // Mensagem de sucesso
         System.out.println("✅ Produto cadastrado com sucesso!");
+    }
+// fim do case 1
 
 
-    }//fim do case 1
 
 
-
-    //case 2
+    // case 2
     public static void listarProdutos() {
 
-        ProdutoRepository produtoRepository = new  ProdutoRepository();
+        // Cria uma instância do repositório de produtos
+        ProdutoRepository produtoRepository = new ProdutoRepository();
+
+        // Busca todos os produtos do banco de dados
         List<ProdutoEntity> produtos = produtoRepository.listarTodos();
+
+        // Conta a quantidade total de produtos cadastrados
         long contadorProdutos = produtoRepository.contarProdutosCadastrados();
 
-        if(produtos!=null){
+        // Verifica se existem produtos cadastrados
+        if (produtos != null) {
             System.out.println("Produtos registrados no banco");
+
+            // Percorre todos os produtos e exibe suas informações
             for (ProdutoEntity produto : produtos) {
                 System.out.println("------------------------");
                 System.out.println("Codigo: " + produto.getCodigoProduto());
@@ -183,54 +206,68 @@ public class SystemAdm {
                 System.out.println("\n");
                 System.out.println("\n");
                 System.out.println("\n");
-
             }
+
+            // Mostra o total de produtos cadastrados
             System.out.println("Total de produtos cadastrados: " + contadorProdutos);
-        }else{
+
+        } else {
+            // Se não houver produtos, exibe mensagem de erro
             System.out.println("Erro! nao foi encontrado nenhum adm no banco");
         }
 
-    }//fim do case 2
+    } // fim do case 2
 
 
-    //case 3
-public static void buscarProdutoPorPreco(Scanner scanner){
+    // case 3
+    public static void buscarProdutoPorPreco(Scanner scanner) {
+        // Limpa a quebra de linha pendente no Scanner
         scanner.nextLine();
+
+        // Solicita valor mínimo
         System.out.printf("Valor minimo:");
         double valor1 = scanner.nextDouble();
-      System.out.printf("Valor maximo:");
-      double valor2 = scanner.nextDouble();
 
-    try{
-        ProdutoRepository produto = new  ProdutoRepository();
-        produto.buscarPorValor(valor1,valor2);
+        // Solicita valor máximo
+        System.out.printf("Valor maximo:");
+        double valor2 = scanner.nextDouble();
 
+        try {
+            // Instancia o repositório de produtos
+            ProdutoRepository produto = new ProdutoRepository();
 
-    } catch (Exception e) {
-        throw new RuntimeException("Erro ao buscar por valor minimo e maximo: " + e.getMessage(), e);
+            produto.buscarPorValor(valor1, valor2);
+
+        } catch (Exception e) {
+            // Lança uma RuntimeException caso ocorra erro
+            throw new RuntimeException("Erro ao buscar por valor minimo e maximo: " + e.getMessage(), e);
+        }
     }
 
 
-}//fim do case 3
-
-
 //case 4
-    public static void removerProduto(Scanner scanner) {
-        scanner.nextLine();
-        System.out.println("\n--Remover Produto ---");
-        System.out.print("Nome do Produto: ");
-        String nomeProdutoRemover  = scanner.nextLine();
+public static void removerProduto(Scanner scanner) {
+    // Limpa a quebra de linha pendente no Scanner
+    scanner.nextLine();
 
-        try{
-            ProdutoRepository produto = new  ProdutoRepository();
-            produto.deletarNomeProduto( nomeProdutoRemover);
+    // Tela de remoção de produto
+    System.out.println("\n--Remover Produto ---");
+    System.out.print("Nome do Produto: ");
+    String nomeProdutoRemover = scanner.nextLine(); // Captura o nome do produto a ser removido
 
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao adicionar administrador: " + e.getMessage(), e);
-        }
+    try {
+        // Instancia o repositório de produtos
+        ProdutoRepository produto = new ProdutoRepository();
 
+        // Chama o método para deletar o produto pelo nome
+        produto.deletarNomeProduto(nomeProdutoRemover);
 
-    }//fim do case 4
+    } catch (Exception e) {
+        // Lança uma RuntimeException caso ocorra erro
+        throw new RuntimeException("Erro ao adicionar administrador: " + e.getMessage(), e);
+    }
+
+} // fim do case 4
 
 
 
@@ -329,85 +366,95 @@ public static void buscarProdutoPorPreco(Scanner scanner){
 
 
    //case 8
-    public static void cadastrarCliente(Scanner scanner) {
-        System.out.print("1 - Tipo Atacado\n");
-        System.out.print("2 - Tipo Varejo\n");
-        System.out.print("Escolha o tipo de cliente que deseja cadastrar: ");
-        int tipoCliente = scanner.nextInt();
-        scanner.nextLine();
+   public static void cadastrarCliente(Scanner scanner) {
+       // Escolha do tipo de cliente (Atacado ou Varejo)
+       System.out.print("1 - Tipo Atacado\n");
+       System.out.print("2 - Tipo Varejo\n");
+       System.out.print("Escolha o tipo de cliente que deseja cadastrar: ");
+       int tipoCliente = scanner.nextInt();
+       scanner.nextLine(); // Consumir a quebra de linha pendente
 
-        System.out.print("Nome: ");
-        String nome = scanner.nextLine();
+       // Coleta de dados pessoais
+       System.out.print("Nome: ");
+       String nome = scanner.nextLine();
 
-        System.out.print("CPF: ");
-        String cpf = scanner.nextLine();
+       System.out.print("CPF: ");
+       String cpf = scanner.nextLine();
 
-        System.out.print("Data de nascimento (yyyy-MM-dd): ");
-        String dataNascimentoStr = scanner.nextLine();
-        LocalDate dataNascimento = LocalDate.parse(dataNascimentoStr);
+       System.out.print("Data de nascimento (yyyy-MM-dd): ");
+       String dataNascimentoStr = scanner.nextLine();
+       LocalDate dataNascimento = LocalDate.parse(dataNascimentoStr);
 
-        System.out.print("Senha: ");
-        String senha = scanner.nextLine();
+       System.out.print("Senha: ");
+       String senha = scanner.nextLine();
 
-        System.out.print("Rua: ");
-        String rua = scanner.nextLine();
+       // Coleta de dados do endereço
+       System.out.print("Rua: ");
+       String rua = scanner.nextLine();
 
-        System.out.print("Bairro: ");
-        String bairro = scanner.nextLine();
+       System.out.print("Bairro: ");
+       String bairro = scanner.nextLine();
 
-        System.out.print("Município: ");
-        String municipio = scanner.nextLine();
+       System.out.print("Município: ");
+       String municipio = scanner.nextLine();
 
-        System.out.print("Estado: ");
-        String estado = scanner.nextLine();
+       System.out.print("Estado: ");
+       String estado = scanner.nextLine();
 
-        System.out.print("CEP: ");
-        String cep = scanner.nextLine();
+       System.out.print("CEP: ");
+       String cep = scanner.nextLine();
 
-        try {
-                PessoaEntity pessoa = new PessoaEntity();
-                pessoa.setNome(nome);
-                pessoa.setCpf(cpf);
-                pessoa.setDataDeNascimento(dataNascimento);
+       try {
+           // Criação da primeira instância de PessoaEntity
+           PessoaEntity pessoa = new PessoaEntity();
+           pessoa.setNome(nome);
+           pessoa.setCpf(cpf);
+           pessoa.setDataDeNascimento(dataNascimento);
 
-                if (tipoCliente == 1) {
-                    pessoa.setTipo(TipoPessoa.CLIENTE_ATACADO);
-                } else if (tipoCliente == 2) {
-                    pessoa.setTipo(TipoPessoa.CLIENTE_VAREJO);
-                } else {
-                    System.out.println("Erro! Tipo não foi digitado ou digitado incorretamente");
-                    return;
-                }
+           // Definição do tipo de cliente
+           if (tipoCliente == 1) {
+               pessoa.setTipo(TipoPessoa.CLIENTE_ATACADO);
+           } else if (tipoCliente == 2) {
+               pessoa.setTipo(TipoPessoa.CLIENTE_VAREJO);
+           } else {
+               System.out.println("Erro! Tipo não foi digitado ou digitado incorretamente");
+               return;
+           }
 
-            PessoaRepository pessoaRepository = new PessoaRepository();
-            EnderecoRepository enderecoRepository = new EnderecoRepository();
-            ClienteRepository clienteRepository = new ClienteRepository();
+           // Instanciando repositórios
+           PessoaRepository pessoaRepository = new PessoaRepository();
+           EnderecoRepository enderecoRepository = new EnderecoRepository();
+           ClienteRepository clienteRepository = new ClienteRepository();
 
-            EnderecoEntity endereco = new EnderecoEntity(rua, bairro, municipio, estado, cep);
-            enderecoRepository.salvar(endereco);
+           // Criação e salvamento do endereço
+           EnderecoEntity endereco = new EnderecoEntity(rua, bairro, municipio, estado, cep);
+           enderecoRepository.salvar(endereco);
 
-            PessoaEntity outrapessoa = new PessoaEntity();
+           // Criação de outra instância de PessoaEntity (outro objeto separado)
+           PessoaEntity outrapessoa = new PessoaEntity();
+           outrapessoa.setNome(nome);
+           outrapessoa.setCpf(cpf);
+           outrapessoa.setDataDeNascimento(dataNascimento);
+           outrapessoa.setTipo(tipoCliente == 1 ? TipoPessoa.CLIENTE_ATACADO : TipoPessoa.CLIENTE_VAREJO);
 
-            outrapessoa.setNome(nome);
-            outrapessoa.setCpf(cpf);
-            outrapessoa.setDataDeNascimento(dataNascimento);
-            outrapessoa.setTipo(tipoCliente == 1 ? TipoPessoa.CLIENTE_ATACADO : TipoPessoa.CLIENTE_VAREJO);
+           // Salvando a nova pessoa no banco de dados
+           pessoaRepository.salvar(outrapessoa);
 
-         pessoaRepository.salvar(outrapessoa);
+           // Criação e associação do cliente à pessoa cadastrada
+           ClienteEntity cliente = new ClienteEntity();
+           cliente.setPessoa(outrapessoa);
+           cliente.setSenha(senha);
 
-            ClienteEntity cliente = new ClienteEntity();
-            cliente.setPessoa(outrapessoa);
-            cliente.setSenha(senha);
+           // Salvando o cliente
+           clienteRepository.salvar(cliente);
 
-            clienteRepository.salvar(cliente);
-
-
-            System.out.println("✅ Cliente cadastrado com sucesso!");
-            } catch (Exception e) {
-                System.out.println("Erro ao cadastrar cliente: " + e.getMessage());
-            }
-
-}//fim do case 8
+           // Mensagem de sucesso
+           System.out.println("✅ Cliente cadastrado com sucesso!");
+       } catch (Exception e) {
+           // Tratamento de erro
+           System.out.println("Erro ao cadastrar cliente: " + e.getMessage());
+       }
+   }//fim do case 8
 
 
     //case 9
